@@ -5,8 +5,9 @@ move, and see a looping clip of it with its frame data. A toggleable Trajectory 
 stage, takes the victim's percent and a DI input from an on-screen joystick, and draws where
 the victim gets launched and whether they cross a blast zone (lose a stock).
 
-Steps 1 and 2 of the plan are done: the scaffold, themes, and a clickable layout with real
-data for Fox and Marth. Your job starts at step 3, the knockback and DI engine.
+Steps 1 to 3 of the plan are done: the scaffold, themes, a clickable layout with real data
+for Fox and Marth, and the knockback and DI engine in `src/engine/`. Your job starts at
+step 4, the joystick.
 
 ## Commands
 
@@ -22,7 +23,7 @@ npm run import:data    # all 26 characters; add `-- --only fox,marth` for specif
 ```
 
 Before calling any task done, run `npm run typecheck && npm run lint && npm test && npm run build`.
-All four passed at handoff with 26 tests.
+All four passed after step 3 with 74 tests.
 
 ## Stack
 
@@ -68,6 +69,8 @@ src/features/
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated)
+src/engine/                    Knockback, launch angle (Sakurai, DI), stick reading, launch simulation,
+                               kill-percent search. Pure TS; constants.ts cites a source for every value.
 src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen
 src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders
 ```
@@ -117,7 +120,20 @@ The mockup's Trajectory Lab is laid out as:
 
 ## Remaining steps
 
-### Step 3: knockback and DI engine (`src/engine/`)
+### Step 3: knockback and DI engine (`src/engine/`), done
+
+Checked against the Melee decompilation, ikneedata's calculator source and SmashWiki.
+Kill percents in `killPercent.test.ts` match ikneedata exactly. Decisions worth knowing:
+
+- `victimPercent` is the percent **before** the hit; the engine adds the damage.
+- Crouch cancel is 2/3 (ikneedata uses 0.667). Set knockback still uses the victim's weight;
+  `isWeightIndependent` means the same as `setKnockback > 0`.
+- Sakurai angle for airborne victims is 45° (SmashWiki, decomp uses a separate constant);
+  ikneedata uses 44°.
+- The simulation runs until launch speed decays, so a KO can be reported after hitstun.
+- Not modelled: stage collision during flight, techs, ASDI/SDI, traction, staleness.
+
+The original plan for this step follows, for reference.
 
 Write this as pure TypeScript with no React, fully unit-tested before any UI uses it.
 
