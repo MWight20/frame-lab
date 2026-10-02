@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="780" height="150" viewBox="0 0 780 150" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="770" height="150" viewBox="0 0 770 150" role="img" aria-labelledby="title desc">
   <title id="title">Frame Lab — Melee</title>
   <desc id="desc">A compact titlebar logo with a frame counter and a clean, hollow blue reflector hexagon.</desc>
   <!-- No background panel: the logo sits directly on the app header, whose color changes with the theme. -->
@@ -6,15 +6,15 @@
     <linearGradient id="ring" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#b8efff"/><stop offset=".48" stop-color="#78ceff"/><stop offset="1" stop-color="#a9e8ff"/></linearGradient>
     <filter id="blueGlow" x="-45%" y="-45%" width="190%" height="190%"><feGaussianBlur stdDeviation="4" result="blur"/><feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.20  0 0 0 0 0.58  0 0 0 0 1  0 0 0 .58 0" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   </defs>
-  <text x="116" y="96" fill="#f4f1e8" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" letter-spacing="2.4">FRAME</text>
-  <text x="374" y="96" fill="#f4f1e8" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="300" letter-spacing="2.4">LAB</text>
-  <g transform="translate(116 111)" fill="#737c8c">
+  <text x="130" y="96" fill="#f4f1e8" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="800" letter-spacing="2.4">FRAME</text>
+  <text x="364" y="96" fill="#f4f1e8" font-family="Arial, Helvetica, sans-serif" font-size="58" font-weight="300" letter-spacing="2.4">LAB</text>
+  <g transform="translate(130 111)" fill="#737c8c">
     <rect width="5" height="10" rx="2"/><rect x="9" width="5" height="10" rx="2"/><rect x="18" width="5" height="10" rx="2"/><rect x="27" width="5" height="10" rx="2"/><rect x="36" width="5" height="10" rx="2"/><rect x="45" width="5" height="10" rx="2"/><rect x="54" width="5" height="10" rx="2"/><rect x="63" width="5" height="10" rx="2"/>
     <rect x="72" width="5" height="10" rx="2"/><rect x="81" width="5" height="10" rx="2"/><rect x="90" width="5" height="10" rx="2"/><rect x="99" width="5" height="10" rx="2"/><rect x="108" width="5" height="10" rx="2"/><rect x="117" width="5" height="10" rx="2"/><rect x="126" width="5" height="10" rx="2"/><rect x="135" width="5" height="10" rx="2"/>
     <rect x="144" width="5" height="10" rx="2"/><rect x="153" width="5" height="10" rx="2"/><rect x="162" width="5" height="10" rx="2"/><rect x="171" width="5" height="10" rx="2"/><rect x="180" width="5" height="10" rx="2"/><rect x="189" width="5" height="10" rx="2"/><rect x="198" width="5" height="10" rx="2"/><rect x="207" width="5" height="10" rx="2"/>
     <rect x="216" width="5" height="10" rx="2"/><rect x="225" width="5" height="10" rx="2"/><rect x="234" width="5" height="10" rx="2"/><rect x="243" width="5" height="10" rx="2"/><rect x="252" width="5" height="10" rx="2"/><rect x="261" width="5" height="10" rx="2"/><rect x="270" width="5" height="10" rx="2"/><rect x="279" width="5" height="10" rx="2"/>
     <rect x="288" width="5" height="10" rx="2"/><rect x="297" width="5" height="10" rx="2"/><rect x="306" width="5" height="10" rx="2"/><rect x="315" width="5" height="10" rx="2"/><rect x="324" width="5" height="10" rx="2"/><rect x="333" width="5" height="10" rx="2"/><rect x="342" width="5" height="10" rx="2"/><rect x="351" width="5" height="10" rx="2"/>
-    <rect x="360" width="5" height="10" rx="2"/><rect x="369" width="5" height="10" rx="2"/><rect x="378" width="5" height="10" rx="2"/><rect x="387" width="5" height="10" rx="2"/>
+    <rect x="360" width="5" height="10" rx="2"/>
   </g>
   <!-- Clean hollow reflector ring: both outlines use matching, concentric hexagon geometry -->
   <g transform="translate(56 75)" filter="url(#blueGlow)">
@@ -25,7 +25,7 @@
     <path d="M0 0 21-12 21 12Z" fill="#51b9f4" opacity=".18"/>
   </g>
   <!-- MELEE and the version are sized to stay readable when the logo is shown about 63px tall. -->
-  <text id="melee" x="532" y="87" fill="#d9e8f2" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" letter-spacing="4">MELEE</text>
-  <rect id="rule" x="532" y="100" width="140" height="4" rx="2" fill="#9bdfff"/>
-  <text id="version" x="694" y="87" fill="#a3adbb" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" letter-spacing="1">v1.02</text>
+  <text id="melee" x="522" y="87" fill="#d9e8f2" font-family="Arial, Helvetica, sans-serif" font-size="36" font-weight="700" letter-spacing="4">MELEE</text>
+  <rect id="rule" x="522" y="100" width="140" height="4" rx="2" fill="#9bdfff"/>
+  <text id="version" x="684" y="87" fill="#a3adbb" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600" letter-spacing="1">v1.02</text>
 </svg>

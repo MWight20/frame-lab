@@ -9,7 +9,7 @@
   border-bottom: 1px solid var(--fl-header-border);
 }
 
-/* Fills the header's full height; width follows the SVG's 960 × 150 aspect ratio. */
+/* Fills the header's full height; width follows the SVG's 770 × 150 aspect ratio. */
 .logo {
   display: block;
   align-self: stretch;
