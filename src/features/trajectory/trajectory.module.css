@@ -63,7 +63,16 @@
   stroke-dasharray: 4 3;
 }
 
+.controlsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+}
+
 .upcoming {
+  flex: 1 1 200px;
+  margin: 0;
   padding: var(--mantine-spacing-md);
   border: 1px dashed var(--fl-border);
   border-radius: 10px;

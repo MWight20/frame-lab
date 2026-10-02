@@ -38,6 +38,10 @@ export interface PaletteTokens {
   victim: string;
   danger: string;
   dangerBg: string;
+  /** Inside of the joystick's octagonal gate. */
+  gateFill: string;
+  /** Outline of the joystick's gate and its deadzone marker. */
+  gateStroke: string;
   scrim: string;
 }
 
@@ -86,6 +90,8 @@ export const PALETTES: Record<PaletteId, Palette> = {
       victim: '#E07A1F',
       danger: '#C4331F',
       dangerBg: '#FBEDEA',
+      gateFill: '#ECE9DF',
+      gateStroke: '#8C8F99',
       scrim: 'rgba(27, 29, 34, 0.28)',
     },
   },
@@ -124,6 +130,8 @@ export const PALETTES: Record<PaletteId, Palette> = {
       victim: '#ECEEFF',
       danger: '#FF6B5B',
       dangerBg: '#2A1E24',
+      gateFill: '#10132B',
+      gateStroke: '#4A5090',
       scrim: 'rgba(4, 5, 14, 0.55)',
     },
   },
@@ -162,6 +170,8 @@ export const PALETTES: Record<PaletteId, Palette> = {
       victim: '#F5D547',
       danger: '#FF4D4D',
       dangerBg: '#2A1414',
+      gateFill: '#0F0F11',
+      gateStroke: '#4A4A50',
       scrim: 'rgba(0, 0, 0, 0.6)',
     },
   },
