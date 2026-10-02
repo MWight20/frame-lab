@@ -16,7 +16,7 @@ export type {
   VictimPhysics,
 } from './simulateLaunch';
 export { findKillPercent, simulateHit } from './killPercent';
-export type { HitScenario } from './killPercent';
+export type { HitResult, HitScenario } from './killPercent';
 export { STICK_DEADZONE } from './constants';
 export { NEUTRAL_STICK, clampToUnitCircle, readStick, toRawStick } from './stick';
 export type { StickPosition } from './stick';

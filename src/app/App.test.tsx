@@ -2,13 +2,16 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { useSelectionStore } from '../state/selectionStore';
+import { useTrajectoryStore } from '../state/trajectoryStore';
 import { renderWithProviders } from '../test/renderWithProviders';
 import { App } from './App';
 
 const initialState = useSelectionStore.getState();
+const initialTrajectoryState = useTrajectoryStore.getState();
 
 beforeEach(() => {
   useSelectionStore.setState(initialState, true);
+  useTrajectoryStore.setState(initialTrajectoryState, true);
 });
 
 describe('App', () => {
@@ -56,5 +59,59 @@ describe('App', () => {
     expect(screen.getByRole('region', { name: 'Trajectory Lab' })).toBeInTheDocument();
     await user.click(screen.getByRole('switch', { name: 'Trajectory Lab' }));
     expect(screen.queryByRole('region', { name: 'Trajectory Lab' })).not.toBeInTheDocument();
+  });
+});
+
+describe('Trajectory Lab', () => {
+  function card(name: string) {
+    return within(screen.getByRole('region', { name }));
+  }
+
+  it('shows where the hit sends the victim, with and without DI', () => {
+    renderWithProviders(<App />);
+    // Fox up smash on Marth at 80%, center of Final Destination.
+    expect(card('No DI').getByText(/KO through the top blast zone/)).toBeInTheDocument();
+    expect(card('No DI').getByText('79%')).toBeInTheDocument();
+    expect(card('With this DI').getByText('80.0°')).toBeInTheDocument();
+  });
+
+  it('updates the result when the percent changes', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    const percent = screen.getByLabelText('Victim percent (before the hit)');
+    await user.clear(percent);
+    await user.type(percent, '10');
+    expect(card('No DI').getByText('Survives')).toBeInTheDocument();
+  });
+
+  it('changes the DI result when the stick moves', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    screen.getByRole('application', { name: 'DI stick' }).focus();
+    await user.keyboard('{ArrowRight>10/}');
+    expect(card('No DI').getByText('80.0°')).toBeInTheDocument();
+    expect(card('With this DI').queryByText('80.0°')).not.toBeInTheDocument();
+  });
+
+  it('moves the victim with the arrow keys and resets to center stage', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    expect(screen.getByText(/grounded on the main stage/)).toBeInTheDocument();
+
+    screen.getByRole('application', { name: 'Victim position' }).focus();
+    await user.keyboard('{Shift>}{ArrowUp}{/Shift}');
+    expect(screen.getByText('Victim at x 0.0, y 10.0, airborne')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox', { name: /Crouch cancel/ })).toBeDisabled();
+
+    await user.click(screen.getByRole('button', { name: 'Reset to center stage' }));
+    expect(screen.getByText(/grounded on the main stage/)).toBeInTheDocument();
+  });
+
+  it('explains why a grab has nothing to launch', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    await user.click(screen.getByRole('button', { name: 'Grab' }));
+    expect(screen.getByText(/Grab doesn't launch anyone/)).toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: 'No DI' })).not.toBeInTheDocument();
   });
 });

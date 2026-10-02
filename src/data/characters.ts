@@ -31,6 +31,13 @@ export function hasCharacterData(characterId: string): boolean {
   return charactersById.has(characterId);
 }
 
+/** Characters whose data has been imported, in roster order. */
+export function getCharactersWithData(): CharacterData[] {
+  return ROSTER.map((entry) => charactersById.get(entry.id)).filter(
+    (character) => character !== undefined,
+  );
+}
+
 export function findMove(character: CharacterData, moveId: string | null): Move | undefined {
   return character.moves.find((move) => move.id === moveId);
 }

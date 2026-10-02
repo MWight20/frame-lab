@@ -5,9 +5,9 @@ move, and see a looping clip of it with its frame data. A toggleable Trajectory 
 stage, takes the victim's percent and a DI input from an on-screen joystick, and draws where
 the victim gets launched and whether they cross a blast zone (lose a stock).
 
-Steps 1 to 4 of the plan are done: the scaffold, themes, a clickable layout with real data
-for Fox and Marth, the knockback and DI engine in `src/engine/`, and the DI joystick. Your
-job starts at step 5, wiring up the Trajectory Lab.
+Steps 1 to 5 of the plan are done: the scaffold, themes, a clickable layout with real data
+for Fox and Marth, the knockback and DI engine in `src/engine/`, the DI joystick, and the
+working Trajectory Lab. Your job starts at step 6, content.
 
 ## Commands
 
@@ -24,7 +24,7 @@ npm run rename:clips   # preview renaming clip-pack files to move ids; add `-- -
 ```
 
 Before calling any task done, run `npm run typecheck && npm run lint && npm test && npm run build`.
-All four passed after step 4 with 90 tests.
+All four passed after step 5 with 117 tests.
 
 ## Stack
 
@@ -70,10 +70,14 @@ src/features/
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
-                               Joystick + joystickGeometry.ts (pointer/keyboard → stick value)
+                               Joystick + joystickGeometry.ts (pointer/keyboard → stick value),
+                               labScenario.ts (pure: hitbox choice, pin snapping, runs the engine),
+                               LaunchOverlay, VictimPin, LabControls, ResultCard
 src/engine/                    Knockback, launch angle (Sakurai, DI), stick reading, launch simulation,
                                kill-percent search. Pure TS; constants.ts cites a source for every value.
 src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen
+src/state/trajectoryStore.ts   victimId, victimPercent, isCrouching, stick, hitboxName, victimPosition,
+                               isAttackerFacingLeft (lab-only settings)
 src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders
 ```
 
@@ -196,7 +200,23 @@ The original plan for this step follows, for reference.
 - **Readout:** the angle in degrees and the raw −80..80 coordinates.
 - **Optional:** a `useGamepad` hook that polls the Gamepad API in `requestAnimationFrame`, so a real controller can drive the stick.
 
-### Step 5: wire up the Trajectory Lab
+### Step 5: wire up the Trajectory Lab, done
+
+Built as planned, plus a draggable victim pin and an attacker-facing toggle:
+
+- **Pin:** pressing or dragging anywhere on the stage moves the victim there. Within 4 units
+  of the main stage or a platform it snaps on and counts as grounded; anywhere else is
+  airborne (Sakurai 45°, no crouch cancel). Arrow keys move it without snapping (Shift for
+  10 units). The pin marks the victim, not the attacker: Melee's launch angle comes from the
+  hitbox and facing, not the two characters' positions.
+- **Hits:** the lab uses the hit selected in the frame data panel. Grab boxes (effect
+  "Grab") and pummels don't launch, so those moves show an explanation instead.
+- **Results:** each card shows the outcome, angle, knockback, hitstun, and the lowest
+  kill percent from the current spot (`findKillPercent`, about 1 to 6 ms per update).
+- **Known gap:** the app shell's 250px navbar doesn't collapse on phones, so the lab is
+  cramped below about 600px wide.
+
+The original plan for this step follows, for reference.
 
 In `TrajectoryLabPanel`, add:
 
