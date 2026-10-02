@@ -1,0 +1,73 @@
+.panel {
+  min-width: 0;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid var(--fl-border);
+  border-radius: 14px;
+  background: var(--fl-surface);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.title {
+  margin: 0 auto 0 0;
+  font-family: var(--fl-font-display);
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.stageFrame {
+  padding: 6px;
+  border: 1px solid var(--fl-border);
+  border-radius: 10px;
+  background: var(--fl-stage-bg);
+}
+
+.stage {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.blastZone {
+  fill: none;
+  stroke: var(--fl-danger);
+  stroke-width: 1.2;
+  stroke-dasharray: 6 5;
+}
+
+.blastLabel {
+  fill: var(--fl-danger);
+  font-family: var(--fl-font-mono);
+  font-size: 9px;
+}
+
+.stageBody {
+  fill: var(--fl-stage-fill);
+}
+
+.surface {
+  stroke: var(--fl-stage-line);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.surface[data-moving] {
+  stroke-dasharray: 4 3;
+}
+
+.upcoming {
+  padding: var(--mantine-spacing-md);
+  border: 1px dashed var(--fl-border);
+  border-radius: 10px;
+  color: var(--fl-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}

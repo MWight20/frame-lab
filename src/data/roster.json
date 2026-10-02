@@ -1,0 +1,172 @@
+[
+  {
+    "id": "dr-mario",
+    "name": "Dr. Mario",
+    "shortName": "Doc",
+    "fightCoreName": "drmario",
+    "libmeleeName": "Doc"
+  },
+  {
+    "id": "mario",
+    "name": "Mario",
+    "shortName": "Mario",
+    "fightCoreName": "mario",
+    "libmeleeName": "Mario"
+  },
+  {
+    "id": "luigi",
+    "name": "Luigi",
+    "shortName": "Luigi",
+    "fightCoreName": "luigi",
+    "libmeleeName": "Luigi"
+  },
+  {
+    "id": "bowser",
+    "name": "Bowser",
+    "shortName": "Bowser",
+    "fightCoreName": "bowser",
+    "libmeleeName": "Bowser"
+  },
+  {
+    "id": "peach",
+    "name": "Peach",
+    "shortName": "Peach",
+    "fightCoreName": "peach",
+    "libmeleeName": "Peach"
+  },
+  {
+    "id": "yoshi",
+    "name": "Yoshi",
+    "shortName": "Yoshi",
+    "fightCoreName": "yoshi",
+    "libmeleeName": "Yoshi"
+  },
+  {
+    "id": "donkey-kong",
+    "name": "Donkey Kong",
+    "shortName": "DK",
+    "fightCoreName": "donkeykong",
+    "libmeleeName": "DK"
+  },
+  {
+    "id": "captain-falcon",
+    "name": "Captain Falcon",
+    "shortName": "Falcon",
+    "fightCoreName": "captainfalcon",
+    "libmeleeName": "Cptfalcon"
+  },
+  {
+    "id": "ganondorf",
+    "name": "Ganondorf",
+    "shortName": "Ganon",
+    "fightCoreName": "ganondorf",
+    "libmeleeName": "Ganondorf"
+  },
+  {
+    "id": "falco",
+    "name": "Falco",
+    "shortName": "Falco",
+    "fightCoreName": "falco",
+    "libmeleeName": "Falco"
+  },
+  { "id": "fox", "name": "Fox", "shortName": "Fox", "fightCoreName": "fox", "libmeleeName": "Fox" },
+  {
+    "id": "ness",
+    "name": "Ness",
+    "shortName": "Ness",
+    "fightCoreName": "ness",
+    "libmeleeName": "Ness"
+  },
+  {
+    "id": "ice-climbers",
+    "name": "Ice Climbers",
+    "shortName": "ICs",
+    "fightCoreName": "iceclimbers",
+    "libmeleeName": "Popo"
+  },
+  {
+    "id": "kirby",
+    "name": "Kirby",
+    "shortName": "Kirby",
+    "fightCoreName": "kirby",
+    "libmeleeName": "Kirby"
+  },
+  {
+    "id": "samus",
+    "name": "Samus",
+    "shortName": "Samus",
+    "fightCoreName": "samus",
+    "libmeleeName": "Samus"
+  },
+  {
+    "id": "zelda",
+    "name": "Zelda",
+    "shortName": "Zelda",
+    "fightCoreName": "zelda",
+    "libmeleeName": "Zelda"
+  },
+  {
+    "id": "sheik",
+    "name": "Sheik",
+    "shortName": "Sheik",
+    "fightCoreName": "sheik",
+    "libmeleeName": "Sheik"
+  },
+  {
+    "id": "link",
+    "name": "Link",
+    "shortName": "Link",
+    "fightCoreName": "link",
+    "libmeleeName": "Link"
+  },
+  {
+    "id": "young-link",
+    "name": "Young Link",
+    "shortName": "YLink",
+    "fightCoreName": "younglink",
+    "libmeleeName": "Ylink"
+  },
+  {
+    "id": "pichu",
+    "name": "Pichu",
+    "shortName": "Pichu",
+    "fightCoreName": "pichu",
+    "libmeleeName": "Pichu"
+  },
+  {
+    "id": "pikachu",
+    "name": "Pikachu",
+    "shortName": "Pika",
+    "fightCoreName": "pikachu",
+    "libmeleeName": "Pikachu"
+  },
+  {
+    "id": "jigglypuff",
+    "name": "Jigglypuff",
+    "shortName": "Puff",
+    "fightCoreName": "jigglypuff",
+    "libmeleeName": "Jigs"
+  },
+  {
+    "id": "mewtwo",
+    "name": "Mewtwo",
+    "shortName": "Mewtwo",
+    "fightCoreName": "mewtwo",
+    "libmeleeName": "Mewto"
+  },
+  {
+    "id": "mr-game-and-watch",
+    "name": "Mr. Game & Watch",
+    "shortName": "G&W",
+    "fightCoreName": "mrgame&watch",
+    "libmeleeName": "GNW"
+  },
+  {
+    "id": "marth",
+    "name": "Marth",
+    "shortName": "Marth",
+    "fightCoreName": "marth",
+    "libmeleeName": "Marth"
+  },
+  { "id": "roy", "name": "Roy", "shortName": "Roy", "fightCoreName": "roy", "libmeleeName": "Roy" }
+]

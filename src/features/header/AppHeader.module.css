@@ -1,0 +1,40 @@
+.header {
+  height: 100%;
+  padding-inline: var(--mantine-spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--mantine-spacing-xl);
+  background: var(--fl-header-bg);
+  color: var(--fl-header-text);
+  border-bottom: 1px solid var(--fl-header-border);
+}
+
+/* Fills the header's full height; width follows the SVG's 960 × 150 aspect ratio. */
+.logo {
+  display: block;
+  align-self: stretch;
+  height: 100%;
+  width: auto;
+  margin-right: auto;
+}
+
+/* Header controls sit on the header's own background, not the page background. */
+.control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--fl-header-text);
+  font-size: 14px;
+}
+
+.selectInput {
+  min-width: 190px;
+  background: var(--fl-header-control);
+  border-color: var(--fl-header-border);
+  color: var(--fl-header-text);
+}
+
+.switchLabel {
+  color: var(--fl-header-text);
+  font-weight: 600;
+}

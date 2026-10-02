@@ -1,0 +1,184 @@
+/* Character icon ------------------------------------------------------------ */
+
+.icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: var(--fl-surface-raised);
+  color: var(--fl-muted);
+  font-family: var(--fl-font-display);
+  font-weight: 700;
+  line-height: 1;
+  overflow: hidden;
+}
+
+.icon[data-highlighted] {
+  background: var(--fl-accent);
+  color: var(--fl-accent-text);
+}
+
+/* The wiki icons are small pixel art; keep their edges crisp when scaled. */
+.icon img {
+  display: block;
+  image-rendering: pixelated;
+}
+
+/* Character panel (top of the move list) ------------------------------------ */
+
+.panel {
+  padding: var(--mantine-spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-bottom: 1px solid var(--fl-border);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconButton {
+  padding: 2px;
+  border: 1px solid var(--fl-border);
+  border-radius: 10px;
+  background: var(--fl-surface-raised);
+  cursor: pointer;
+  line-height: 0;
+}
+
+.iconButton[aria-expanded='true'] {
+  border: 2px solid var(--fl-accent);
+  padding: 1px;
+}
+
+.iconButton:focus-visible,
+.linkButton:focus-visible,
+.tile:focus-visible {
+  outline: 2px solid var(--fl-accent);
+  outline-offset: 2px;
+}
+
+.name {
+  font-family: var(--fl-font-display);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.linkButton {
+  align-self: flex-start;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--fl-link);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.linkButton:hover {
+  text-decoration: underline;
+}
+
+.stats {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--fl-muted);
+}
+
+.statValue {
+  margin: 0;
+  font-family: var(--fl-font-mono);
+  font-size: 15px;
+}
+
+/* Roster drawer --------------------------------------------------------------- */
+
+.scrim {
+  position: fixed;
+  inset: var(--app-shell-header-height, 64px) 0 0 var(--app-shell-navbar-width, 250px);
+  z-index: 150;
+  border: none;
+  padding: 0;
+  background: var(--fl-scrim);
+  cursor: default;
+}
+
+.drawer {
+  position: fixed;
+  top: var(--app-shell-header-height, 64px);
+  bottom: 0;
+  left: var(--app-shell-navbar-width, 250px);
+  z-index: 151;
+  width: 164px;
+  box-sizing: border-box;
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  background: var(--fl-rail);
+  border-right: 1px solid var(--fl-border);
+  box-shadow: 12px 0 28px rgba(0, 0, 0, 0.22);
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--fl-font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fl-muted);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.tile {
+  height: 60px;
+  padding: 6px 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--fl-border);
+  border-radius: 10px;
+  background: var(--fl-surface);
+  color: var(--fl-muted);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tile:hover {
+  color: var(--fl-text);
+  border-color: var(--fl-muted);
+}
+
+.tile[aria-pressed='true'] {
+  border: 2px solid var(--fl-accent);
+  color: var(--fl-text);
+}
+
+/* Characters without imported data are still selectable, just visibly quieter. */
+.tile[data-has-data='false'] {
+  opacity: 0.55;
+}

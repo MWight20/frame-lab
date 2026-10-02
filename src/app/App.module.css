@@ -1,0 +1,32 @@
+.navbar {
+  display: flex;
+  flex-direction: column;
+  background: var(--fl-surface);
+  border-right: 1px solid var(--fl-border);
+}
+
+.main {
+  background: var(--fl-bg);
+}
+
+/* Two columns on wide screens: move viewer on the left, Trajectory Lab on the right. */
+.workArea {
+  padding: 20px 24px;
+  display: grid;
+  gap: 20px;
+  align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+/* With the lab hidden, the viewer gets one centered column at a comfortable width. */
+.workArea[data-lab-open='false'] {
+  grid-template-columns: minmax(0, 960px);
+  justify-content: center;
+}
+
+/* Below ~1200px the columns stack and the page scrolls. */
+@media (max-width: 75em) {
+  .workArea {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
