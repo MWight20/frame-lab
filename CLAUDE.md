@@ -20,6 +20,7 @@ npm run typecheck      # tsc -b
 npm run build          # typecheck + production build
 npm run format         # Prettier
 npm run import:data    # all 26 characters; add `-- --only fox,marth` for specific ones
+npm run rename:clips   # preview renaming clip-pack files to move ids; add `-- --apply` to rename
 ```
 
 Before calling any task done, run `npm run typecheck && npm run lint && npm test && npm run build`.
@@ -27,15 +28,15 @@ All four passed after step 4 with 90 tests.
 
 ## Stack
 
-| Tool | Version | Notes |
-| --- | --- | --- |
-| Vite | 8 | |
-| React | 19 | |
-| TypeScript | ~6.0.3 | Pinned. Do not upgrade to 7: typescript-eslint requires TypeScript below 6.1. |
-| Mantine | 9 | `@mantine/core` and `@mantine/hooks` |
-| Zustand | 5 | |
-| Vitest | 5 | jsdom environment, Testing Library |
-| Fonts | | Oxanium (display), IBM Plex Sans (body), IBM Plex Mono (numbers), self-hosted through @fontsource |
+| Tool       | Version | Notes                                                                                             |
+| ---------- | ------- | ------------------------------------------------------------------------------------------------- |
+| Vite       | 8       |                                                                                                   |
+| React      | 19      |                                                                                                   |
+| TypeScript | ~6.0.3  | Pinned. Do not upgrade to 7: typescript-eslint requires TypeScript below 6.1.                     |
+| Mantine    | 9       | `@mantine/core` and `@mantine/hooks`                                                              |
+| Zustand    | 5       |                                                                                                   |
+| Vitest     | 5       | jsdom environment, Testing Library                                                                |
+| Fonts      |         | Oxanium (display), IBM Plex Sans (body), IBM Plex Mono (numbers), self-hosted through @fontsource |
 
 ## Code conventions
 
@@ -88,6 +89,11 @@ Behavior worth knowing before you change things:
 
 - **Moves, hitboxes, and weight:** from FightCore frame-data (GPL-3.0). The owner should review the GPL before publishing with the data bundled in.
 - **Gravity, fall speed, and fast-fall speed:** from libmelee `characterdata.csv` (LGPL-3.0). FightCore's `gravity` field actually holds fall speed, so the importer ignores it. A test fails if gravity is ever 1 or higher.
+- **Move clips:** from Emi House's clip pack (Google Drive, linked from FightCore), which says
+  "Do as you please with them! Just give proper credit if you can." Keep the credit under the
+  clip player (`src/data/credits.ts`) and in the README. `npm run rename:clips` converts the
+  pack's names (`uSmash`, `AirNB`, `fSmashHi`) to move ids (`usmash`, `aneutralb`, `fsmash-hi`).
+  Variants after a hyphen aren't played yet.
 - **Stage geometry:** from libmelee `stages.py`.
   - Yoshi's Story has asymmetric side blast zones (−175.7 and 173.6). This is correct, not a typo.
   - Fountain of Dreams side platforms move during a match. They are drawn at a nominal height of 20, marked in the code as display-only.
@@ -104,12 +110,12 @@ The approved layout is board D ("Merged workstation") on the design canvas. The 
 
 Trajectory tokens already exist in all three palettes:
 
-| Token | Use |
-| --- | --- |
-| `di` | Path with the chosen DI |
-| `ghost` | Faint no-DI path behind it |
-| `victim` | Victim's starting dot |
-| `danger` / `danger-bg` | Blast zone and KO result |
+| Token                       | Use                               |
+| --------------------------- | --------------------------------- |
+| `di`                        | Path with the chosen DI           |
+| `ghost`                     | Faint no-DI path behind it        |
+| `victim`                    | Victim's starting dot             |
+| `danger` / `danger-bg`      | Blast zone and KO result          |
 | `gate-fill` / `gate-stroke` | Joystick gate and deadzone marker |
 
 The mockup's Trajectory Lab is laid out as:
