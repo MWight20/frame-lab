@@ -5,9 +5,9 @@ move, and see a looping clip of it with its frame data. A toggleable Trajectory 
 stage, takes the victim's percent and a DI input from an on-screen joystick, and draws where
 the victim gets launched and whether they cross a blast zone (lose a stock).
 
-Steps 1 to 3 of the plan are done: the scaffold, themes, a clickable layout with real data
-for Fox and Marth, and the knockback and DI engine in `src/engine/`. Your job starts at
-step 4, the joystick.
+Steps 1 to 4 of the plan are done: the scaffold, themes, a clickable layout with real data
+for Fox and Marth, the knockback and DI engine in `src/engine/`, and the DI joystick. Your
+job starts at step 5, wiring up the Trajectory Lab.
 
 ## Commands
 
@@ -23,7 +23,7 @@ npm run import:data    # all 26 characters; add `-- --only fox,marth` for specif
 ```
 
 Before calling any task done, run `npm run typecheck && npm run lint && npm test && npm run build`.
-All four passed after step 3 with 74 tests.
+All four passed after step 4 with 90 tests.
 
 ## Stack
 
@@ -68,7 +68,8 @@ src/features/
   header/                      Wordmark, Theme select, Trajectory Lab switch
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
-  trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated)
+  trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
+                               Joystick + joystickGeometry.ts (pointer/keyboard → stick value)
 src/engine/                    Knockback, launch angle (Sakurai, DI), stick reading, launch simulation,
                                kill-percent search. Pure TS; constants.ts cites a source for every value.
 src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen
@@ -109,7 +110,7 @@ Trajectory tokens already exist in all three palettes:
 | `ghost` | Faint no-DI path behind it |
 | `victim` | Victim's starting dot |
 | `danger` / `danger-bg` | Blast zone and KO result |
-| `gate-fill` / `gate-stroke` | Joystick gate, if you add them as tokens (the mockup used these names) |
+| `gate-fill` / `gate-stroke` | Joystick gate and deadzone marker |
 
 The mockup's Trajectory Lab is laid out as:
 
@@ -170,7 +171,14 @@ simulateLaunch({ knockback, angle, start, victim, stage }): { path: Point[]; hit
 
 **Tests.** Include regression cases against known kill percents from ikneedata. For example, compare the engine's kill percent for Fox up smash against Marth on Final Destination with no DI to ikneedata's result. Also test the edge cases: a stick inside the deadzone, an angle of 361, and set knockback.
 
-### Step 4: joystick (`src/features/trajectory/Joystick.tsx`)
+### Step 4: joystick (`src/features/trajectory/Joystick.tsx`), done
+
+Built as planned, with two deliberate differences: the deadzone is drawn as a dashed
+**square**, because the game zeroes each axis separately (a ring would be wrong), and the
+optional `useGamepad` hook is not built yet. Shift + arrow moves one controller step (1/80).
+The panel holds the stick in local state for now; step 5 moves it to the store.
+
+The original plan for this step follows, for reference.
 
 - **Props:** `{ value: { x, y }, onChange }`, with values clamped to magnitude 1.
 - **Drawing:** an SVG octagonal gate like the GameCube stick, with a dashed deadzone ring.
