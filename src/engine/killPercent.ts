@@ -17,16 +17,26 @@ export interface HitScenario {
   isGrounded: boolean;
   isCrouching?: boolean;
   isReversed?: boolean;
+  /** Throws use a fixed weight of 100 for knockback. */
+  isThrow?: boolean;
   stick?: StickPosition;
 }
 
+/** A launch plus the knockback and final angle that produced it. */
+export interface HitResult extends LaunchResult {
+  knockback: number;
+  /** Launch angle in degrees after the Sakurai angle, facing and DI. */
+  angle: number;
+}
+
 /** Runs the whole chain for one hit: knockback, launch angle, then the flight. */
-export function simulateHit(scenario: HitScenario, victimPercent: number): LaunchResult {
+export function simulateHit(scenario: HitScenario, victimPercent: number): HitResult {
   const knockback = calculateKnockback({
     hitbox: scenario.hitbox,
     victimPercent,
     victimWeight: scenario.victim.weight,
     isCrouching: scenario.isCrouching,
+    isThrow: scenario.isThrow,
   });
   const angle = resolveLaunchAngle(scenario.hitbox.angle, {
     knockback,
@@ -34,7 +44,7 @@ export function simulateHit(scenario: HitScenario, victimPercent: number): Launc
     stick: scenario.stick,
     isReversed: scenario.isReversed,
   });
-  return simulateLaunch({
+  const launch = simulateLaunch({
     knockback,
     angle,
     start: scenario.start,
@@ -42,6 +52,7 @@ export function simulateHit(scenario: HitScenario, victimPercent: number): Launc
     stage: scenario.stage,
     isGrounded: scenario.isGrounded,
   });
+  return { ...launch, knockback, angle };
 }
 
 /**
