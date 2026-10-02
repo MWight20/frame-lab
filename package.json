@@ -14,7 +14,8 @@
     "typecheck": "tsc -b",
     "test": "vitest run",
     "test:watch": "vitest",
-    "import:data": "node scripts/import-fightcore.mjs"
+    "import:data": "node scripts/import-fightcore.mjs",
+    "rename:clips": "node scripts/rename-clips.mjs"
   },
   "dependencies": {
     "@fontsource/ibm-plex-mono": "^5.3.0",

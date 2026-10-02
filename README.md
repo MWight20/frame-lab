@@ -19,15 +19,16 @@ npm run dev
 
 Then open the address Vite prints (usually http://localhost:5173).
 
-| Script                | What it does                                               |
-| --------------------- | ---------------------------------------------------------- |
-| `npm run dev`         | Start the dev server with hot reload                       |
-| `npm run build`       | Type-check and build to `dist/`                            |
-| `npm run preview`     | Serve the production build locally                         |
-| `npm test`            | Run the tests once (`npm run test:watch` to keep watching) |
-| `npm run lint`        | Run ESLint                                                 |
-| `npm run format`      | Format everything with Prettier                            |
-| `npm run import:data` | Download and convert frame data (see below)                |
+| Script                 | What it does                                                |
+| ---------------------- | ----------------------------------------------------------- |
+| `npm run dev`          | Start the dev server with hot reload                        |
+| `npm run build`        | Type-check and build to `dist/`                             |
+| `npm run preview`      | Serve the production build locally                          |
+| `npm test`             | Run the tests once (`npm run test:watch` to keep watching)  |
+| `npm run lint`         | Run ESLint                                                  |
+| `npm run format`       | Format everything with Prettier                             |
+| `npm run import:data`  | Download and convert frame data (see below)                 |
+| `npm run rename:clips` | Rename clip-pack files to move ids (`-- --apply` to rename) |
 
 ## Project layout
 
@@ -81,12 +82,23 @@ still appear in the roster, dimmed, with a message explaining how to import them
 
 ### Sources and licenses
 
-| Data                                 | Source                                                            | License                                              |
-| ------------------------------------ | ----------------------------------------------------------------- | ---------------------------------------------------- |
-| Moves, hitboxes, weight              | [FightCore frame-data](https://github.com/FightCore/frame-data)   | GPL-3.0                                              |
-| Gravity, fall speed, fast-fall speed | [libmelee](https://github.com/altf4/libmelee) `characterdata.csv` | LGPL-3.0                                             |
-| Blast zones, ledges, platforms       | [libmelee](https://github.com/altf4/libmelee) `stages.py`         | LGPL-3.0                                             |
-| Character icons (once added)         | [SmashWiki](<https://www.ssbwiki.com/Category:Head_icons_(SSBM)>) | Credit SmashWiki; the art itself belongs to Nintendo |
+| Data                                 | Source                                                                                                                   | License                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| Moves, hitboxes, weight              | [FightCore frame-data](https://github.com/FightCore/frame-data)                                                          | GPL-3.0                                                                       |
+| Gravity, fall speed, fast-fall speed | [libmelee](https://github.com/altf4/libmelee) `characterdata.csv`                                                        | LGPL-3.0                                                                      |
+| Blast zones, ledges, platforms       | [libmelee](https://github.com/altf4/libmelee) `stages.py`                                                                | LGPL-3.0                                                                      |
+| Character icons (once added)         | [SmashWiki](<https://www.ssbwiki.com/Category:Head_icons_(SSBM)>)                                                        | Credit SmashWiki; the art itself belongs to Nintendo                          |
+| Move clips                           | [Emi House's clip pack](https://drive.google.com/drive/folders/14rcZ8ed43hWOJaxQhHsB-hcAgxWubRaz), linked from FightCore | Free to use with credit (see below); the footage itself is of Nintendo's game |
+
+Knockback, DI and launch mechanics (`src/engine/`) were checked against
+[SmashWiki](https://www.ssbwiki.com/Knockback), [ikneedata's calculator](https://ikneedata.com/calculator),
+the [Melee decompilation](https://github.com/doldecomp/melee) and
+[meleelight](https://github.com/schmooblidon/meleelight). `src/engine/constants.ts` cites the
+source for each value.
+
+The clip pack's notes say: "Do as you please with them! Just give proper credit if you can."
+The app credits Emi House under every clip, linking to the pack. The clips were downloaded in
+October 2026 and renamed to Frame Lab's move ids with `npm run rename:clips`.
 
 FightCore's data is GPL-3.0. Check what that license asks of you before publishing the app
 with the data bundled in.

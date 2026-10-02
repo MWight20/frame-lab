@@ -1,5 +1,6 @@
-import { Button, SegmentedControl } from '@mantine/core';
+import { Anchor, Button, SegmentedControl } from '@mantine/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { CLIP_CREDIT } from '../../data/credits';
 import classes from './moves.module.css';
 
 const FRAMES_PER_SECOND = 60;
@@ -142,6 +143,15 @@ export function MoveClip({
           disabled={!hasClip}
         />
       </div>
+
+      {hasClip && (
+        <p className={classes.clipCredit}>
+          Clip by{' '}
+          <Anchor href={CLIP_CREDIT.url} target="_blank" rel="noreferrer" inherit>
+            {CLIP_CREDIT.author}
+          </Anchor>
+        </p>
+      )}
     </>
   );
 }
