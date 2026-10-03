@@ -97,11 +97,15 @@ Behavior worth knowing before you change things:
   "Do as you please with them! Just give proper credit if you can." Keep the credit under the
   clip player (`src/data/credits.ts`) and in the README. `npm run rename:clips` converts the
   pack's names (`uSmash`, `AirNB`, `fSmashHi`) to move ids (`usmash`, `aneutralb`, `fsmash-hi`).
-  Variants after a hyphen aren't played yet.
+  Variants after a hyphen are played only when a move has no plain clip: a hand-picked one
+  (`PREFERRED_VARIANTS` in `src/data/clips.ts`), else `-uncharged`, else the first
+  alphabetically. The title row then shows which variant is playing.
 - **Stage geometry:** from libmelee `stages.py`.
   - Yoshi's Story has asymmetric side blast zones (−175.7 and 173.6). This is correct, not a typo.
   - Fountain of Dreams side platforms move during a match. They are drawn at a nominal height of 20, marked in the code as display-only.
 - **Hits without frame windows.** Some FightCore hits have no window, for example Fox's back air ("clean" and "late") and his up special. These have `startFrame`/`endFrame` set to `null`. For a single-hit move, the importer falls back to the move's active frames.
+- **Placeholder moves.** FightCore has empty "Unknown_air" entries for Kirby and Pikachu (no
+  frames, no hits). The importer skips any move whose id starts with `unknown`.
 - **Missing values.** A few totals and active frames are missing (Rapid Jabs, Pummel, some Marth throws). These display as "—".
 
 ## Design reference

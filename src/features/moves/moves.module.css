@@ -100,8 +100,8 @@
   color: var(--fl-muted);
 }
 
-/* Shown beside the title in place of the clip player for moves without a clip. */
-.noClipTag {
+/* Beside the title: "No clip" in place of the player, or which variant clip is playing. */
+.clipTag {
   align-self: center;
   padding: 2px 8px;
   border: 1px solid var(--fl-border);

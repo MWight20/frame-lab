@@ -1,0 +1,2108 @@
+{
+  "id": "sheik",
+  "name": "Sheik",
+  "attributes": {
+    "weight": 90,
+    "gravity": 0.12,
+    "fallSpeed": 2.13,
+    "fastFallSpeed": 3
+  },
+  "moves": [
+    {
+      "id": "jab1",
+      "name": "Jab 1",
+      "category": "ground",
+      "totalFrames": 17,
+      "firstActiveFrame": 2,
+      "lastActiveFrame": 3,
+      "iasa": 16,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 2,
+          "endFrame": 3,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 4,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 4,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id2",
+              "damage": 4,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jab2",
+      "name": "Jab 2",
+      "category": "ground",
+      "totalFrames": 17,
+      "firstActiveFrame": 2,
+      "lastActiveFrame": 4,
+      "iasa": 16,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 2,
+          "endFrame": 4,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id2",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rjab",
+      "name": "Rapid Jabs",
+      "category": "ground",
+      "totalFrames": 35,
+      "firstActiveFrame": 2,
+      "lastActiveFrame": 33,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "loop has an additional 6 frames startup and 8 frames endlag. 6 hits in each loop, frames 2-3, 8-9, 14-15, 20-21, 26-27, 32-33",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 3,
+          "endFrame": 4,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 9,
+          "endFrame": 10,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 15,
+          "endFrame": 16,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 21,
+          "endFrame": 22,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 27,
+          "endFrame": 28,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 33,
+          "endFrame": 34,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id1",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            },
+            {
+              "name": "id2",
+              "damage": 1,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 2,
+              "hitlag": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ftilt",
+      "name": "Forward Tilt",
+      "category": "ground",
+      "totalFrames": 29,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 10,
+      "iasa": 27,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 10,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 7,
+              "angle": 74,
+              "baseKnockback": 40,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 7,
+              "angle": 74,
+              "baseKnockback": 40,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            },
+            {
+              "name": "id2",
+              "damage": 7,
+              "angle": 74,
+              "baseKnockback": 40,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "utilt",
+      "name": "Up Tilt",
+      "category": "ground",
+      "totalFrames": 33,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 24,
+      "iasa": 26,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 10,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 8,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 8,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 19,
+          "endFrame": 24,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 4,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 140,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 4,
+              "angle": 80,
+              "baseKnockback": 10,
+              "knockbackGrowth": 140,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dtilt",
+      "name": "Down Tilt",
+      "category": "ground",
+      "totalFrames": 29,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 8,
+      "iasa": 28,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 8,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 8,
+              "angle": 70,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 8,
+              "angle": 90,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dattack",
+      "name": "Dash Attack",
+      "category": "ground",
+      "totalFrames": 37,
+      "firstActiveFrame": 6,
+      "lastActiveFrame": 12,
+      "iasa": 36,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 6,
+          "endFrame": 6,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 10,
+              "angle": 80,
+              "baseKnockback": 34,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 10,
+              "angle": 80,
+              "baseKnockback": 34,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 7,
+          "endFrame": 12,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 7,
+              "angle": 361,
+              "baseKnockback": 15,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 7,
+              "angle": 361,
+              "baseKnockback": 15,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fsmash",
+      "name": "Forward Smash",
+      "category": "ground",
+      "totalFrames": 50,
+      "firstActiveFrame": 12,
+      "lastActiveFrame": 29,
+      "iasa": 46,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 12,
+          "endFrame": 12,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 5,
+              "angle": 78,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 60,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 5,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 60,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id2",
+              "damage": 5,
+              "angle": 70,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 60,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 27,
+          "endFrame": 29,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 50,
+              "knockbackGrowth": 70,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 50,
+              "knockbackGrowth": 70,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id2",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 50,
+              "knockbackGrowth": 70,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "usmash",
+      "name": "Up Smash",
+      "category": "ground",
+      "totalFrames": 47,
+      "firstActiveFrame": 12,
+      "lastActiveFrame": 16,
+      "iasa": 40,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 12,
+          "endFrame": 12,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 17,
+              "angle": 90,
+              "baseKnockback": 50,
+              "knockbackGrowth": 105,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 9,
+              "hitlag": 9
+            },
+            {
+              "name": "id1",
+              "damage": 17,
+              "angle": 90,
+              "baseKnockback": 50,
+              "knockbackGrowth": 105,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 9,
+              "hitlag": 9
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 14,
+          "endFrame": 16,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 13,
+              "angle": 88,
+              "baseKnockback": 38,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id1",
+              "damage": 13,
+              "angle": 88,
+              "baseKnockback": 38,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id2",
+              "damage": 13,
+              "angle": 78,
+              "baseKnockback": 38,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id3",
+              "damage": 13,
+              "angle": 78,
+              "baseKnockback": 38,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dsmash",
+      "name": "Down Smash",
+      "category": "ground",
+      "totalFrames": 49,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 24,
+      "iasa": 46,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 9,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 13,
+              "angle": 40,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id1",
+              "damage": 13,
+              "angle": 40,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id2",
+              "damage": 13,
+              "angle": 40,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 16,
+          "endFrame": 19,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 10,
+              "angle": 50,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 10,
+              "angle": 50,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 22,
+          "endFrame": 24,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 10,
+              "angle": 50,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 10,
+              "angle": 50,
+              "baseKnockback": 35,
+              "knockbackGrowth": 80,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "nair",
+      "name": "Neutral Air",
+      "category": "aerial",
+      "totalFrames": 48,
+      "firstActiveFrame": 3,
+      "lastActiveFrame": 30,
+      "iasa": 42,
+      "landingLag": 16,
+      "lCancelledLandingLag": 8,
+      "autoCancelBefore": 3,
+      "autoCancelAfter": 30,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 3,
+          "endFrame": 6,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 14,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 8,
+              "hitlag": 8
+            },
+            {
+              "name": "id1",
+              "damage": 14,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 8,
+              "hitlag": 8
+            },
+            {
+              "name": "id2",
+              "damage": 14,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 8,
+              "hitlag": 8
+            },
+            {
+              "name": "id3",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 7,
+          "endFrame": 30,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 9,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 9,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id2",
+              "damage": 9,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id3",
+              "damage": 9,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fair",
+      "name": "Forward Air",
+      "category": "aerial",
+      "totalFrames": 33,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 7,
+      "iasa": null,
+      "landingLag": 16,
+      "lCancelledLandingLag": 8,
+      "autoCancelBefore": 5,
+      "autoCancelAfter": 10,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 7,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 13,
+              "angle": 25,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bair",
+      "name": "Back Air",
+      "category": "aerial",
+      "totalFrames": 37,
+      "firstActiveFrame": 4,
+      "lastActiveFrame": 19,
+      "iasa": null,
+      "landingLag": 16,
+      "lCancelledLandingLag": 8,
+      "autoCancelBefore": 4,
+      "autoCancelAfter": 24,
+      "notes": null,
+      "hits": [
+        {
+          "name": "clean",
+          "startFrame": 4,
+          "endFrame": 7,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 8,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 8,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 6
+            },
+            {
+              "name": "id2",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 5,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id3",
+              "damage": 14,
+              "angle": 361,
+              "baseKnockback": 12,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 8,
+              "hitlag": 8
+            }
+          ]
+        },
+        {
+          "name": "late",
+          "startFrame": 8,
+          "endFrame": 19,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 6,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 7,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 5,
+              "hitlag": 5
+            },
+            {
+              "name": "id2",
+              "damage": 9,
+              "angle": 361,
+              "baseKnockback": 4,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id3",
+              "damage": 10,
+              "angle": 361,
+              "baseKnockback": 8,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uair",
+      "name": "Up Air",
+      "category": "aerial",
+      "totalFrames": 39,
+      "firstActiveFrame": 5,
+      "lastActiveFrame": 20,
+      "iasa": 37,
+      "landingLag": 24,
+      "lCancelledLandingLag": 12,
+      "autoCancelBefore": 5,
+      "autoCancelAfter": 29,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 5,
+          "endFrame": 7,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 12,
+              "angle": 80,
+              "baseKnockback": 15,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            },
+            {
+              "name": "id1",
+              "damage": 12,
+              "angle": 80,
+              "baseKnockback": 15,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        },
+        {
+          "name": null,
+          "startFrame": 8,
+          "endFrame": 20,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 9,
+              "angle": 70,
+              "baseKnockback": 10,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            },
+            {
+              "name": "id1",
+              "damage": 9,
+              "angle": 70,
+              "baseKnockback": 10,
+              "knockbackGrowth": 120,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 6
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dair",
+      "name": "Down Air",
+      "category": "aerial",
+      "totalFrames": 48,
+      "firstActiveFrame": 15,
+      "lastActiveFrame": 33,
+      "iasa": null,
+      "landingLag": 20,
+      "lCancelledLandingLag": 10,
+      "autoCancelBefore": 3,
+      "autoCancelAfter": 48,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 15,
+          "endFrame": 33,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 11,
+              "angle": 80,
+              "baseKnockback": 30,
+              "knockbackGrowth": 90,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 7
+            },
+            {
+              "name": "id1",
+              "damage": 11,
+              "angle": 80,
+              "baseKnockback": 30,
+              "knockbackGrowth": 90,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 6,
+              "hitlag": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "neutralb",
+      "name": "Needle Storm",
+      "category": "special",
+      "totalFrames": 40,
+      "firstActiveFrame": 4,
+      "lastActiveFrame": 19,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "data refers to fully charged needles. 6 needles total",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 4,
+          "endFrame": 19,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id2",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id3",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aneutralb",
+      "name": "Needle Storm (Air)",
+      "category": "special",
+      "totalFrames": 39,
+      "firstActiveFrame": 11,
+      "lastActiveFrame": 26,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "data refers to fully charged needles. 6 needles total",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 11,
+          "endFrame": 26,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id2",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id3",
+              "damage": 3,
+              "angle": 0,
+              "baseKnockback": 24,
+              "knockbackGrowth": 34,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sideb",
+      "name": "Chain",
+      "category": "special",
+      "totalFrames": 75,
+      "firstActiveFrame": 22,
+      "lastActiveFrame": 65,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "comes out frame 22, fully extended frame 34, can retract as early as frame 44, pull hitbox frames 19-31 with 10 frames endlag",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 22,
+          "endFrame": 65,
+          "hitboxes": [
+            {
+              "name": "id3",
+              "damage": 5,
+              "angle": 80,
+              "baseKnockback": 35,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Electric",
+              "shieldstun": 4,
+              "hitlag": 7
+            },
+            {
+              "name": "id2",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 14,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 3,
+              "angle": 60,
+              "baseKnockback": 8,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 361,
+              "baseKnockback": 6,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asideb",
+      "name": "Chain (Air)",
+      "category": "special",
+      "totalFrames": 75,
+      "firstActiveFrame": 22,
+      "lastActiveFrame": 65,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "comes out frame 22, fully extended frame 34, can retract as early as frame 44, pull hitbox frames 19-31 with 10 frames endlag",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 22,
+          "endFrame": 65,
+          "hitboxes": [
+            {
+              "name": "id3",
+              "damage": 5,
+              "angle": 80,
+              "baseKnockback": 35,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Electric",
+              "shieldstun": 4,
+              "hitlag": 7
+            },
+            {
+              "name": "id2",
+              "damage": 3,
+              "angle": 70,
+              "baseKnockback": 14,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id1",
+              "damage": 3,
+              "angle": 60,
+              "baseKnockback": 8,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            },
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 361,
+              "baseKnockback": 6,
+              "knockbackGrowth": 30,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Slash",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "upb",
+      "name": "Vanish",
+      "category": "special",
+      "totalFrames": 94,
+      "firstActiveFrame": 36,
+      "lastActiveFrame": 42,
+      "iasa": null,
+      "landingLag": 30,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "invulnerable frames 18-55. choose direction at frame 35",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 36,
+          "endFrame": 42,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 12,
+              "angle": 90,
+              "baseKnockback": 80,
+              "knockbackGrowth": 60,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Flame",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aupb",
+      "name": "Up B (Air)",
+      "category": "special",
+      "totalFrames": 94,
+      "firstActiveFrame": 36,
+      "lastActiveFrame": 42,
+      "iasa": null,
+      "landingLag": 30,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "Invincible: 18-55 Landfallspeciallag: 4 The frame of choosing direction: 35",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 36,
+          "endFrame": 42,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 12,
+              "angle": 90,
+              "baseKnockback": 80,
+              "knockbackGrowth": 60,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Flame",
+              "shieldstun": 7,
+              "hitlag": 7
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "downb",
+      "name": "Transform",
+      "category": "special",
+      "totalFrames": 62,
+      "firstActiveFrame": 27,
+      "lastActiveFrame": 36,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "invulnerable frames 27-36, becomes zelda on frame 37",
+      "hits": []
+    },
+    {
+      "id": "adownb",
+      "name": "Transform (Air)",
+      "category": "special",
+      "totalFrames": 62,
+      "firstActiveFrame": 27,
+      "lastActiveFrame": 36,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "invulnerable frames 27-36, becomes zelda on frame 37",
+      "hits": []
+    },
+    {
+      "id": "grab",
+      "name": "Grab",
+      "category": "grab",
+      "totalFrames": 30,
+      "firstActiveFrame": 3,
+      "lastActiveFrame": 34,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": "Loop has an additional 6 frames startup and 8 frames endlag",
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 6,
+          "endFrame": 7,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 0,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Grab",
+              "shieldstun": 1,
+              "hitlag": 0
+            },
+            {
+              "name": "id1",
+              "damage": 0,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Grab",
+              "shieldstun": 1,
+              "hitlag": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dashgrab",
+      "name": "Dash Grab",
+      "category": "grab",
+      "totalFrames": 40,
+      "firstActiveFrame": 8,
+      "lastActiveFrame": 9,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 7,
+          "endFrame": 8,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 0,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Grab",
+              "shieldstun": 1,
+              "hitlag": 0
+            },
+            {
+              "name": "id1",
+              "damage": 0,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Grab",
+              "shieldstun": 1,
+              "hitlag": 0
+            },
+            {
+              "name": "id2",
+              "damage": 0,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 0,
+              "isWeightIndependent": false,
+              "effect": "Grab",
+              "shieldstun": 1,
+              "hitlag": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pummel",
+      "name": "Pummel",
+      "category": "grab",
+      "totalFrames": null,
+      "firstActiveFrame": null,
+      "lastActiveFrame": null,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 9,
+          "endFrame": 9,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 3,
+              "angle": 80,
+              "baseKnockback": 0,
+              "knockbackGrowth": 100,
+              "setKnockback": 30,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 3,
+              "hitlag": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fthrow",
+      "name": "Forward Throw",
+      "category": "grab",
+      "totalFrames": 47,
+      "firstActiveFrame": 20,
+      "lastActiveFrame": 23,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 20,
+          "endFrame": 23,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 6,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 80,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bthrow",
+      "name": "Back Throw",
+      "category": "grab",
+      "totalFrames": 47,
+      "firstActiveFrame": 15,
+      "lastActiveFrame": 19,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 15,
+          "endFrame": 19,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 5,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 80,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 5,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 80,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "uthrow",
+      "name": "Up Throw",
+      "category": "grab",
+      "totalFrames": 57,
+      "firstActiveFrame": 19,
+      "lastActiveFrame": 22,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 19,
+          "endFrame": 22,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 6,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 90,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 6,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 90,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dthrow",
+      "name": "Down Throw",
+      "category": "grab",
+      "totalFrames": 57,
+      "firstActiveFrame": 31,
+      "lastActiveFrame": 35,
+      "iasa": null,
+      "landingLag": null,
+      "lCancelledLandingLag": null,
+      "autoCancelBefore": null,
+      "autoCancelAfter": null,
+      "notes": null,
+      "hits": [
+        {
+          "name": null,
+          "startFrame": 31,
+          "endFrame": 35,
+          "hitboxes": [
+            {
+              "name": "id0",
+              "damage": 5,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 90,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            },
+            {
+              "name": "id1",
+              "damage": 5,
+              "angle": 361,
+              "baseKnockback": 0,
+              "knockbackGrowth": 0,
+              "setKnockback": 90,
+              "isWeightIndependent": false,
+              "effect": "Normal",
+              "shieldstun": 4,
+              "hitlag": 5
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "FightCore frame-data (GPL-3.0): https://github.com/FightCore/frame-data",
+    "libmelee character data (LGPL-3.0): https://github.com/altf4/libmelee"
+  ]
+}

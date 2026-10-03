@@ -107,9 +107,18 @@ async function main() {
   }
 }
 
+/**
+ * FightCore has a few empty entries named "Unknown_..." (Kirby's and Pikachu's
+ * "Unknown_air") with no frames or hits. Showing them would add a blank row to the move list.
+ */
+function isPlaceholderMove(move) {
+  return move.normalizedName.startsWith('unknown');
+}
+
 function buildCharacter(entry, source, physics) {
   const moves = source.moves
     .filter((move) => CATEGORY_BY_FIGHTCORE_TYPE[move.type])
+    .filter((move) => !isPlaceholderMove(move))
     .map(buildMove)
     .sort(compareMoves);
 
