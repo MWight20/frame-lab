@@ -5,7 +5,7 @@ import {
   getRosterEntry,
   MOVE_CATEGORY_LABELS,
 } from '../../data/characters';
-import { hasClip } from '../../data/clips';
+import { findClip } from '../../data/clips';
 import { useSelectionStore } from '../../state/selectionStore';
 import { FrameDataPanel } from './FrameDataPanel';
 import { FrameStrip } from './FrameStrip';
@@ -35,7 +35,7 @@ export function MoveViewer() {
   }
 
   // Moves without a clip skip the player entirely, so the frame data moves up.
-  const isClipAvailable = hasClip(characterId, move.id);
+  const clip = findClip(characterId, move.id);
 
   return (
     <section className={classes.viewer} aria-labelledby="move-title">
@@ -46,20 +46,21 @@ export function MoveViewer() {
         <span className={classes.subtitle}>
           {character.name}, {MOVE_CATEGORY_LABELS[move.category].toLowerCase()}
         </span>
-        {!isClipAvailable && <span className={classes.noClipTag}>No clip</span>}
+        {!clip && <span className={classes.clipTag}>No clip</span>}
+        {clip?.variant && <span className={classes.clipTag}>Clip: {clip.variant}</span>}
       </div>
 
-      {isClipAvailable && (
+      {clip && (
         <MoveClip
           key={`${characterId}/${move.id}`}
           characterId={characterId}
-          moveId={move.id}
+          clipFileId={clip.fileId}
           moveName={move.name}
           totalFrames={move.totalFrames}
           onFrameChange={setCurrentFrame}
         />
       )}
-      <FrameStrip move={move} currentFrame={isClipAvailable ? currentFrame : null} />
+      <FrameStrip move={move} currentFrame={clip ? currentFrame : null} />
       <FrameDataPanel move={move} />
     </section>
   );

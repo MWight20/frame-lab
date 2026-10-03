@@ -12,7 +12,8 @@ const SPEED_OPTIONS = [
 
 interface MoveClipProps {
   characterId: string;
-  moveId: string;
+  /** File name in public/clips/<characterId>/ without .mp4, from findClip. */
+  clipFileId: string;
   moveName: string;
   totalFrames: number | null;
   /** Called with the frame on screen (1-based) whenever it changes, or null without a clip. */
@@ -20,18 +21,18 @@ interface MoveClipProps {
 }
 
 /**
- * Plays public/clips/<characterId>/<moveId>.mp4 on a loop, with frame-by-frame controls.
+ * Plays public/clips/<characterId>/<clipFileId>.mp4 on a loop, with frame-by-frame controls.
  * Clips are expected to start on the move's first frame (see public/clips/README.md).
  * Only rendered for moves that have a clip (see data/clips.ts).
  */
 export function MoveClip({
   characterId,
-  moveId,
+  clipFileId,
   moveName,
   totalFrames,
   onFrameChange,
 }: MoveClipProps) {
-  const src = `${import.meta.env.BASE_URL}clips/${characterId}/${moveId}.mp4`;
+  const src = `${import.meta.env.BASE_URL}clips/${characterId}/${clipFileId}.mp4`;
   const videoRef = useRef<HTMLVideoElement>(null);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);

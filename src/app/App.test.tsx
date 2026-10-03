@@ -40,6 +40,14 @@ describe('App', () => {
     expect(screen.getByRole('region', { name: 'Frame data' })).toBeInTheDocument();
   });
 
+  it('plays a variant clip, and says which, for a move with only variants', () => {
+    useSelectionStore.setState({ characterId: 'samus', moveId: 'neutralb' });
+    renderWithProviders(<App />);
+    const clip = screen.getByLabelText('Charge Shot clip');
+    expect(clip).toHaveAttribute('src', expect.stringMatching(/samus\/neutralb-uncharged\.mp4$/));
+    expect(screen.getByText('Clip: uncharged')).toBeInTheDocument();
+  });
+
   it('names the selected stage in full next to the Trajectory Lab title', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
@@ -72,12 +80,19 @@ describe('App', () => {
     expect(screen.getByText('Marth, ground')).toBeInTheDocument();
   });
 
-  it('explains how to import characters without data', async () => {
+  it('loads any roster character, now that the whole roster is imported', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
     await user.click(screen.getAllByRole('button', { name: 'Select character' })[0]!);
-    await user.click(screen.getByRole('button', { name: 'Peach (no data yet)' }));
-    expect(screen.getByText(/npm run import:data -- --only peach/)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Peach' }));
+    expect(screen.getByRole('navigation', { name: 'Peach moves' })).toBeInTheDocument();
+  });
+
+  it('explains how to import a character without data', () => {
+    // Every roster character has data today, so use an id that was never imported.
+    useSelectionStore.setState({ characterId: 'not-imported' });
+    renderWithProviders(<App />);
+    expect(screen.getByText(/npm run import:data -- --only not-imported/)).toBeInTheDocument();
   });
 
   it('hides and shows the Trajectory Lab', async () => {
