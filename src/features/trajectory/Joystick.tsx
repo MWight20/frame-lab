@@ -37,11 +37,11 @@ export interface JoystickProps {
 /**
  * An on-screen GameCube control stick for choosing DI. Drag the knob with a mouse or
  * finger, or focus it and use the arrow keys (Shift for single controller steps). The
- * stick returns to neutral when released unless "Hold position" is on, the way a real
- * stick springs back.
+ * stick stays where it is released while "Hold position" is on (the default, so a DI
+ * choice sticks); turning it off makes the stick spring back to neutral like a real one.
  */
 export function Joystick({ value, onChange, label = 'DI stick' }: JoystickProps) {
-  const [isHeld, setHeld] = useState(false);
+  const [isHeld, setHeld] = useState(true);
   const isDragging = useRef(false);
   const readoutId = useId();
 

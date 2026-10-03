@@ -16,10 +16,27 @@
   gap: 12px;
 }
 
+/* The title and the current stage's name, kept together on the left of the header. */
+.titleGroup {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin-right: auto;
+}
+
 .title {
-  margin: 0 auto 0 0;
+  margin: 0;
   font-family: var(--fl-font-display);
   font-size: 20px;
+  font-weight: 600;
+}
+
+.stageName {
+  padding-left: 12px;
+  border-left: 2px solid var(--fl-border);
+  color: var(--fl-muted);
+  font-size: 15px;
   font-weight: 600;
 }
 

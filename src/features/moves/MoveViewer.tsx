@@ -5,13 +5,14 @@ import {
   getRosterEntry,
   MOVE_CATEGORY_LABELS,
 } from '../../data/characters';
+import { hasClip } from '../../data/clips';
 import { useSelectionStore } from '../../state/selectionStore';
 import { FrameDataPanel } from './FrameDataPanel';
 import { FrameStrip } from './FrameStrip';
 import { MoveClip } from './MoveClip';
 import classes from './moves.module.css';
 
-/** The selected move: clip, frame strip and frame data. */
+/** The selected move: clip (when there is one), frame strip and frame data. */
 export function MoveViewer() {
   const characterId = useSelectionStore((state) => state.characterId);
   const moveId = useSelectionStore((state) => state.moveId);
@@ -33,6 +34,9 @@ export function MoveViewer() {
     );
   }
 
+  // Moves without a clip skip the player entirely, so the frame data moves up.
+  const isClipAvailable = hasClip(characterId, move.id);
+
   return (
     <section className={classes.viewer} aria-labelledby="move-title">
       <div className={classes.titleRow}>
@@ -42,17 +46,20 @@ export function MoveViewer() {
         <span className={classes.subtitle}>
           {character.name}, {MOVE_CATEGORY_LABELS[move.category].toLowerCase()}
         </span>
+        {!isClipAvailable && <span className={classes.noClipTag}>No clip</span>}
       </div>
 
-      <MoveClip
-        key={`${characterId}/${move.id}`}
-        characterId={characterId}
-        moveId={move.id}
-        moveName={move.name}
-        totalFrames={move.totalFrames}
-        onFrameChange={setCurrentFrame}
-      />
-      <FrameStrip move={move} currentFrame={currentFrame} />
+      {isClipAvailable && (
+        <MoveClip
+          key={`${characterId}/${move.id}`}
+          characterId={characterId}
+          moveId={move.id}
+          moveName={move.name}
+          totalFrames={move.totalFrames}
+          onFrameChange={setCurrentFrame}
+        />
+      )}
+      <FrameStrip move={move} currentFrame={isClipAvailable ? currentFrame : null} />
       <FrameDataPanel move={move} />
     </section>
   );

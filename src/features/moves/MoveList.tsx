@@ -19,13 +19,10 @@ export function MoveList() {
     <nav className={classes.list} aria-label={`${character.name} moves`}>
       {groupMovesByCategory(character.moves).map((group) => (
         <div key={group.category}>
-          <div className={classes.groupLabel} id={`move-group-${group.category}`}>
+          <h3 className={classes.groupLabel} id={`move-group-${group.category}`}>
             {group.label}
-          </div>
-          <ul
-            aria-labelledby={`move-group-${group.category}`}
-            style={{ listStyle: 'none', margin: 0, padding: 0 }}
-          >
+          </h3>
+          <ul className={classes.groupMoves} aria-labelledby={`move-group-${group.category}`}>
             {group.moves.map((move) => (
               <li key={move.id}>
                 <button

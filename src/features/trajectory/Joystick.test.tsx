@@ -59,10 +59,13 @@ describe('Joystick', () => {
     expect(screen.getByText('Neutral')).toBeInTheDocument();
   });
 
-  it('follows a drag and springs back to neutral on release', () => {
+  it('follows a drag and springs back to neutral on release when Hold position is off', async () => {
+    const user = userEvent.setup();
     renderWithProviders(<ControlledJoystick />);
     const pad = getPad();
     giveLayout(pad);
+
+    await user.click(screen.getByRole('switch', { name: 'Hold position' }));
 
     // Full tilt is 80 of the 100 units from center, so 80 px right of center at 200 px wide.
     fireEvent.pointerDown(pad, { clientX: 180, clientY: 100, pointerId: 1 });
@@ -75,13 +78,12 @@ describe('Joystick', () => {
     expect(screen.getByText('Neutral')).toBeInTheDocument();
   });
 
-  it('keeps its position on release when Hold position is on', async () => {
-    const user = userEvent.setup();
+  it('keeps its position on release, because Hold position starts on', () => {
     renderWithProviders(<ControlledJoystick />);
     const pad = getPad();
     giveLayout(pad);
 
-    await user.click(screen.getByRole('switch', { name: 'Hold position' }));
+    expect(screen.getByRole('switch', { name: 'Hold position' })).toBeChecked();
     fireEvent.pointerDown(pad, { clientX: 180, clientY: 100, pointerId: 1 });
     fireEvent.pointerUp(pad, { pointerId: 1 });
     expect(screen.getByText('x 80 · y 0')).toBeInTheDocument();
