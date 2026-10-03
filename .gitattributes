@@ -1,0 +1,4 @@
+# Keep LF line endings in the working tree on every OS, matching Prettier's default
+# (endOfLine: "lf"). Without this, core.autocrlf on Windows checks files out as CRLF
+# and `npm run format:check` fails on files nobody changed.
+* text=auto eol=lf
