@@ -1,6 +1,7 @@
 import { Button, Checkbox, NumberInput, SegmentedControl, Select } from '@mantine/core';
 import { getCharactersWithData } from '../../data/characters';
 import type { Hit, Hitbox } from '../../data/types';
+import { STALE_QUEUE_LENGTH } from '../../engine';
 import { useTrajectoryStore } from '../../state/trajectoryStore';
 import type { VictimPlacement } from './labScenario';
 import classes from './trajectory.module.css';
@@ -33,6 +34,10 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
   const isFacingLeft = useTrajectoryStore((state) => state.isAttackerFacingLeft);
   const setFacingLeft = useTrajectoryStore((state) => state.setAttackerFacingLeft);
   const resetPosition = useTrajectoryStore((state) => state.resetVictimPosition);
+  const staleUses = useTrajectoryStore((state) => state.staleUses);
+  const setStaleUses = useTrajectoryStore((state) => state.setStaleUses);
+  const techOnLanding = useTrajectoryStore((state) => state.techOnLanding);
+  const setTechOnLanding = useTrajectoryStore((state) => state.setTechOnLanding);
 
   const victimOptions = getCharactersWithData().map((character) => ({
     value: character.id,
@@ -89,6 +94,25 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
           checked={isCrouching && placement.isGrounded}
           disabled={!placement.isGrounded}
           onChange={(event) => setCrouching(event.currentTarget.checked)}
+        />
+      </div>
+      <div className={classes.fieldRow}>
+        <NumberInput
+          className={classes.staleInput}
+          label="Stale uses"
+          description={`Times this move hit in the attacker's last ${STALE_QUEUE_LENGTH} hits`}
+          value={staleUses}
+          onChange={(value) => setStaleUses(typeof value === 'number' ? value : 0)}
+          min={0}
+          max={STALE_QUEUE_LENGTH}
+          clampBehavior="strict"
+          allowDecimal={false}
+        />
+        <Checkbox
+          label="Tech on landing"
+          description="Tumbling victims only"
+          checked={techOnLanding}
+          onChange={(event) => setTechOnLanding(event.currentTarget.checked)}
         />
       </div>
       <div className={classes.positionRow}>

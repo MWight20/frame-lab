@@ -3,6 +3,7 @@ import { getStage } from '../data/stages';
 import { simulateLaunch } from './simulateLaunch';
 
 const FINAL_DESTINATION = getStage('final-destination');
+const BATTLEFIELD = getStage('battlefield');
 const MARTH = { gravity: 0.085, fallSpeed: 2.2 };
 const ORIGIN = { x: 0, y: 0 };
 
@@ -39,10 +40,11 @@ describe('simulateLaunch', () => {
   });
 
   it('reports where hitstun ends when the victim survives', () => {
+    // Offstage to the right, so there is no floor to come back down on.
     const result = simulateLaunch({
       knockback: 100,
       angle: 80,
-      start: ORIGIN,
+      start: { x: 150, y: 60 },
       victim: MARTH,
       stage: FINAL_DESTINATION,
     });
@@ -97,6 +99,87 @@ describe('simulateLaunch', () => {
     // Without launch speed the drop per frame settles at exactly the fall speed.
     const steps = result.path.slice(1).map((point, index) => result.path[index]!.y - point.y);
     expect(Math.max(...steps)).toBeLessThanOrEqual(MARTH.fallSpeed + 1e-9);
+  });
+
+  it('ends the flight when a tumbling victim comes back down on the stage', () => {
+    const result = simulateLaunch({
+      knockback: 100,
+      angle: 80,
+      start: ORIGIN,
+      victim: MARTH,
+      stage: FINAL_DESTINATION,
+    });
+    expect(result.outcome).toMatchObject({
+      type: 'lands',
+      surfaceName: 'Main stage',
+      landing: 'missed-tech',
+    });
+    if (result.outcome.type !== 'lands') return;
+    expect(result.outcome.position.y).toBe(0);
+    expect(result.path.at(-1)).toEqual(result.outcome.position);
+    expect(result.path).toHaveLength(result.outcome.frame + 1);
+  });
+
+  it('reports a tech when the victim techs on landing', () => {
+    const result = simulateLaunch({
+      knockback: 100,
+      angle: 80,
+      start: ORIGIN,
+      victim: MARTH,
+      stage: FINAL_DESTINATION,
+      techOnLanding: true,
+    });
+    expect(result.outcome).toMatchObject({ type: 'lands', landing: 'tech' });
+  });
+
+  it("lets a victim who isn't tumbling just land, since they can't tech", () => {
+    const result = simulateLaunch({
+      knockback: 50,
+      angle: 80,
+      start: ORIGIN,
+      victim: MARTH,
+      stage: FINAL_DESTINATION,
+      techOnLanding: true,
+    });
+    expect(result.isTumble).toBe(false);
+    expect(result.outcome).toMatchObject({ type: 'lands', landing: 'land' });
+  });
+
+  it('flies up through a platform and lands on it coming down', () => {
+    // Under Battlefield's top platform (y 54.4), launched straight up.
+    const result = simulateLaunch({
+      knockback: 150,
+      angle: 90,
+      start: ORIGIN,
+      victim: MARTH,
+      stage: BATTLEFIELD,
+    });
+    expect(Math.max(...result.path.map((point) => point.y))).toBeGreaterThan(54.4);
+    expect(result.outcome).toMatchObject({ type: 'lands', surfaceName: 'Top platform' });
+  });
+
+  it('falls past the stage when the victim is beyond its edge', () => {
+    const result = simulateLaunch({
+      knockback: 100,
+      angle: 80,
+      start: { x: 100, y: 10 },
+      victim: MARTH,
+      stage: FINAL_DESTINATION,
+    });
+    expect(result.outcome.type).not.toBe('lands');
+  });
+
+  it('lands a grounded tumbling victim straight away on a shallow downward hit', () => {
+    // 5° below the floor is within the 10° that isn't reflected.
+    const result = simulateLaunch({
+      knockback: 120,
+      angle: 355,
+      start: ORIGIN,
+      victim: MARTH,
+      stage: FINAL_DESTINATION,
+      isGrounded: true,
+    });
+    expect(result.outcome).toMatchObject({ type: 'lands', frame: 1, landing: 'missed-tech' });
   });
 
   it('bounces a tumbling grounded victim hit downward off the floor', () => {

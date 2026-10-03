@@ -143,6 +143,15 @@
   stroke: var(--fl-ghost);
 }
 
+.landingMarker {
+  fill: var(--fl-di);
+}
+
+.ghostLanding {
+  fill: var(--fl-ghost);
+  opacity: 0.7;
+}
+
 .pin {
   cursor: grab;
   outline: none;
@@ -188,6 +197,10 @@
   flex-wrap: wrap;
   align-items: flex-end;
   gap: 16px 24px;
+}
+
+.staleInput {
+  flex: 1 1 180px;
 }
 
 .fieldLabel {

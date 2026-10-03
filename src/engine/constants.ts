@@ -25,6 +25,16 @@ export const THROW_WEIGHT = 100;
  */
 export const CROUCH_CANCEL_MULTIPLIER = 2 / 3;
 
+/**
+ * Stale-move negation: the game remembers the attacker's last 9 moves that connected.
+ * Each time the current move appears in that queue, its damage drops by the weight for
+ * that position, most recent first. Melee has no bonus for fresh moves.
+ * Source: decomp ft_80089118 (loops 9 entries, weights from PlCo.dat via Fighter_804D6548),
+ * disc values from meleelight-decomp-edition staling.js,
+ * https://www.ssbwiki.com/Stale-move_negation.
+ */
+export const STALE_QUEUE_WEIGHTS = [0.09, 0.08, 0.07, 0.06, 0.05, 0.04, 0.03, 0.02, 0.01];
+
 /** Hitstun frames per point of knockback. Source: https://www.ssbwiki.com/Hitstun. */
 export const HITSTUN_PER_KNOCKBACK = 0.4;
 
@@ -88,6 +98,14 @@ export const TOP_BLAST_ZONE_MIN_SPEED = 2.4;
  * this share of their vertical speed. Source: decomp (x1EC), ikneedata getVerticalVelocity.
  */
 export const GROUND_BOUNCE_MULTIPLIER = 0.8;
+
+/**
+ * That bounce only happens when the launch points more than this many degrees below the
+ * floor. Shallower downward launches aren't reflected, so the victim lands straight away.
+ * Source: decomp ftCo_8008DCE0 (compares against 90° + x1E8; x1E8 = 10° on the disc, per
+ * meleelight-decomp-edition meleeCommon.js).
+ */
+export const GROUND_BOUNCE_MIN_DEGREES = 10;
 
 /**
  * The simulation stops when both launch speed components fall below this, matching

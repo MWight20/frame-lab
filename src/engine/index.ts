@@ -9,6 +9,7 @@ export type { LaunchAngleOptions } from './launchAngle';
 export { simulateLaunch } from './simulateLaunch';
 export type {
   BlastZoneSide,
+  LandingKind,
   LaunchInput,
   LaunchOutcome,
   LaunchResult,
@@ -18,5 +19,6 @@ export type {
 export { findKillPercent, simulateHit } from './killPercent';
 export type { HitResult, HitScenario } from './killPercent';
 export { STICK_DEADZONE } from './constants';
+export { STALE_QUEUE_LENGTH, staledDamage, staleMultiplier } from './staleness';
 export { NEUTRAL_STICK, clampToUnitCircle, readStick, toRawStick } from './stick';
 export type { StickPosition } from './stick';

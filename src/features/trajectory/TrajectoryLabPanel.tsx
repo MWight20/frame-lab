@@ -110,6 +110,8 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
   const victimPosition = useTrajectoryStore((state) => state.victimPosition);
   const setVictimPosition = useTrajectoryStore((state) => state.setVictimPosition);
   const isAttackerFacingLeft = useTrajectoryStore((state) => state.isAttackerFacingLeft);
+  const staleUses = useTrajectoryStore((state) => state.staleUses);
+  const techOnLanding = useTrajectoryStore((state) => state.techOnLanding);
   const positionId = useId();
 
   // Pointer drags have already snapped to a surface, so only an exact match counts here.
@@ -129,6 +131,8 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
         isCrouching,
         isAttackerFacingLeft,
         stick,
+        staleUses,
+        techOnLanding,
       }),
     [
       move,
@@ -140,6 +144,8 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
       isCrouching,
       isAttackerFacingLeft,
       stick,
+      staleUses,
+      techOnLanding,
     ],
   );
 
