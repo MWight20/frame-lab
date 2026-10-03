@@ -5,6 +5,7 @@ import {
   THROW_WEIGHT,
   TUMBLE_THRESHOLD,
 } from './constants';
+import { staledDamage } from './staleness';
 
 /** The hitbox values that decide knockback. These match the fields on `Hitbox`. */
 export interface KnockbackHitbox {
@@ -23,6 +24,8 @@ export interface KnockbackInput {
   isCrouching?: boolean;
   /** Throws use a fixed weight of 100 whatever the victim weighs. */
   isThrow?: boolean;
+  /** Times this move appears in the attacker's stale queue (0 to 9). Defaults to fresh. */
+  staleUses?: number;
 }
 
 /**
@@ -33,8 +36,12 @@ export interface KnockbackInput {
  *
  * where p is the victim's percent after the hit, d the hit's damage, w the weight,
  * s the knockback growth and b the base knockback. The knockback ratio (handicap and
- * the damage-ratio rule) is 1 in normal play, so it is left out. Stale-move negation
- * is not modelled yet, so staled and unstaled damage are the same.
+ * the damage-ratio rule) is 1 in normal play, so it is left out.
+ *
+ * Staleness only lowers p: the victim takes the staled damage, but d stays the hit's full
+ * damage. Set knockback ignores staleness entirely. Source: decomp ftColl_80079AB0
+ * (percent uses the staled damage, `unk_count` the unstaled), ikneedata getKnockback,
+ * https://www.ssbwiki.com/Knockback.
  */
 export function calculateKnockback(input: KnockbackInput): number {
   const { hitbox } = input;
@@ -43,7 +50,7 @@ export function calculateKnockback(input: KnockbackInput): number {
   const raw =
     hitbox.setKnockback > 0
       ? setKnockbackFormula(hitbox, weight)
-      : scalingKnockbackFormula(hitbox, weight, input.victimPercent);
+      : scalingKnockbackFormula(hitbox, weight, input.victimPercent, input.staleUses ?? 0);
 
   // Crouch cancel is applied after the formula in the game, so it affects set knockback too.
   const afterCrouch = input.isCrouching ? raw * CROUCH_CANCEL_MULTIPLIER : raw;
@@ -54,9 +61,10 @@ function scalingKnockbackFormula(
   hitbox: KnockbackHitbox,
   weight: number,
   percentBeforeHit: number,
+  staleUses: number,
 ): number {
   // The game drops any fraction of the victim's percent before adding this hit's damage.
-  const percentAfterHit = Math.floor(percentBeforeHit) + hitbox.damage;
+  const percentAfterHit = Math.floor(percentBeforeHit) + staledDamage(hitbox.damage, staleUses);
   const damageTerm = percentAfterHit / 10 + (percentAfterHit * hitbox.damage) / 20;
   return applyWeightAndGrowth(damageTerm, hitbox, weight);
 }

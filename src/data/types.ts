@@ -103,3 +103,12 @@ export interface Stage {
   edgeX: number;
   platforms: Platform[];
 }
+
+/** Something a character can stand on: the main stage's top or a platform. */
+export interface StageSurface {
+  /** "Main stage", "Top platform", "Left platform" or "Right platform". */
+  name: string;
+  y: number;
+  left: number;
+  right: number;
+}

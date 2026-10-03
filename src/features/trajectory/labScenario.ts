@@ -1,3 +1,4 @@
+import { getStageSurfaces } from '../../data/stages';
 import type { CharacterData, Hit, Hitbox, Move, Stage } from '../../data/types';
 import {
   calculateKnockback,
@@ -26,13 +27,6 @@ export interface VictimPlacement {
   isGrounded: boolean;
   /** "Main stage", "Top platform" and so on, or null when airborne. */
   surfaceName: string | null;
-}
-
-interface Surface {
-  name: string;
-  y: number;
-  left: number;
-  right: number;
 }
 
 /** Pummels hit a held victim, who stays in the grab instead of being launched. */
@@ -101,7 +95,7 @@ export function placeVictim(point: Point, stage: Stage, snapDistance: number): V
     y: clamp(point.y, bottom + 1, top - 1),
   };
 
-  const surface = stageSurfaces(stage).find(
+  const surface = getStageSurfaces(stage).find(
     (candidate) =>
       clamped.x >= candidate.left &&
       clamped.x <= candidate.right &&
@@ -115,22 +109,6 @@ export function placeVictim(point: Point, stage: Stage, snapDistance: number): V
   };
 }
 
-function stageSurfaces(stage: Stage): Surface[] {
-  const mainStage = { name: 'Main stage', y: 0, left: -stage.edgeX, right: stage.edgeX };
-  return [
-    mainStage,
-    ...stage.platforms.map((platform) => ({ ...platform, name: platformName(platform, stage) })),
-  ];
-}
-
-/** Names platforms by position, which is how players refer to them. */
-function platformName(platform: Stage['platforms'][number], stage: Stage): string {
-  const isHighest = stage.platforms.every((other) => other.y <= platform.y);
-  const center = (platform.left + platform.right) / 2;
-  if (isHighest && Math.abs(center) < 1) return 'Top platform';
-  return center < 0 ? 'Left platform' : 'Right platform';
-}
-
 export interface LabInput {
   move: Move;
   hitbox: Hitbox;
@@ -142,6 +120,9 @@ export interface LabInput {
   /** True when the attacker faces left, which mirrors the launch angle. */
   isAttackerFacingLeft: boolean;
   stick: StickPosition;
+  /** Times the move appears in the attacker's stale queue (0 to 9). */
+  staleUses: number;
+  techOnLanding: boolean;
 }
 
 export interface LabResult {
@@ -170,6 +151,8 @@ function runOnce(input: LabInput, stick: StickPosition): LabResult {
     isReversed: input.isAttackerFacingLeft,
     isThrow: THROW_MOVE_IDS.has(input.move.id),
     stick,
+    staleUses: input.staleUses,
+    techOnLanding: input.techOnLanding,
   };
   return {
     hit: simulateHit(scenario, input.victimPercent),

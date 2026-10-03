@@ -18,6 +18,10 @@ interface TrajectoryState {
   /** Where the victim stands when the hit lands, in game units. */
   victimPosition: Point;
   isAttackerFacingLeft: boolean;
+  /** Times the move appears in the attacker's stale queue (0 to 9); 0 is fresh. */
+  staleUses: number;
+  /** Whether a tumbling victim techs when they land on the stage or a platform. */
+  techOnLanding: boolean;
 
   selectVictim: (victimId: string) => void;
   setVictimPercent: (percent: number) => void;
@@ -27,6 +31,8 @@ interface TrajectoryState {
   setVictimPosition: (position: Point) => void;
   setAttackerFacingLeft: (isFacingLeft: boolean) => void;
   resetVictimPosition: () => void;
+  setStaleUses: (staleUses: number) => void;
+  setTechOnLanding: (techOnLanding: boolean) => void;
 }
 
 /** Marth is the usual reference victim; fall back to whoever has data. */
@@ -53,6 +59,8 @@ export const useTrajectoryStore = create<TrajectoryState>()((set) => ({
   hitboxName: null,
   victimPosition: CENTER_STAGE,
   isAttackerFacingLeft: false,
+  staleUses: 0,
+  techOnLanding: false,
 
   selectVictim: (victimId) => set({ victimId }),
   setVictimPercent: (victimPercent) => set({ victimPercent }),
@@ -62,4 +70,6 @@ export const useTrajectoryStore = create<TrajectoryState>()((set) => ({
   setVictimPosition: (victimPosition) => set({ victimPosition }),
   setAttackerFacingLeft: (isAttackerFacingLeft) => set({ isAttackerFacingLeft }),
   resetVictimPosition: () => set({ victimPosition: CENTER_STAGE }),
+  setStaleUses: (staleUses) => set({ staleUses }),
+  setTechOnLanding: (techOnLanding) => set({ techOnLanding }),
 }));

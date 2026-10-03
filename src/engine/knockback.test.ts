@@ -72,6 +72,36 @@ describe('calculateKnockback', () => {
     expect(onLighter).toBeGreaterThan(atZero);
   });
 
+  it('uses staled damage for the percent but full damage for d', () => {
+    // Used 3 times in a row: 1 - (0.09 + 0.08 + 0.07) = 0.76, so 18 becomes 13.68.
+    const knockback = calculateKnockback({
+      hitbox: FOX_UP_SMASH,
+      victimPercent: 79,
+      victimWeight: MARTH_WEIGHT,
+      staleUses: 3,
+    });
+    const p = 79 + 18 * 0.76;
+    const d = 18;
+    const expected = ((p / 10 + (p * d) / 20) * (200 / 187) * 1.4 + 18) * 1.12 + 30;
+    expect(knockback).toBeCloseTo(expected, 6);
+    expect(knockback).toBeLessThan(212.8295);
+  });
+
+  it('ignores staleness for set knockback', () => {
+    const fresh = calculateKnockback({
+      hitbox: FOX_UP_AIR_HIT_1,
+      victimPercent: 50,
+      victimWeight: MARTH_WEIGHT,
+    });
+    const stale = calculateKnockback({
+      hitbox: FOX_UP_AIR_HIT_1,
+      victimPercent: 50,
+      victimWeight: MARTH_WEIGHT,
+      staleUses: 9,
+    });
+    expect(stale).toBe(fresh);
+  });
+
   it('applies crouch cancel to set knockback too', () => {
     const crouched = calculateKnockback({
       hitbox: FOX_UP_AIR_HIT_1,

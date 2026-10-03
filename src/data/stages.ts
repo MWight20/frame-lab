@@ -1,4 +1,4 @@
-import type { Stage } from './types';
+import type { Platform, Stage, StageSurface } from './types';
 
 /**
  * Tournament-legal stages.
@@ -87,4 +87,26 @@ export const DEFAULT_STAGE_ID = 'final-destination';
 
 export function getStage(stageId: string): Stage {
   return STAGES.find((stage) => stage.id === stageId) ?? STAGES[0]!;
+}
+
+/**
+ * Every surface a character can land on, main stage first. Platforms are named by
+ * position, which is how players refer to them.
+ */
+export function getStageSurfaces(stage: Pick<Stage, 'edgeX' | 'platforms'>): StageSurface[] {
+  const mainStage = { name: 'Main stage', y: 0, left: -stage.edgeX, right: stage.edgeX };
+  const platforms = stage.platforms.map((platform) => ({
+    name: platformName(platform, stage.platforms),
+    y: platform.y,
+    left: platform.left,
+    right: platform.right,
+  }));
+  return [mainStage, ...platforms];
+}
+
+function platformName(platform: Platform, allPlatforms: Platform[]): string {
+  const isHighest = allPlatforms.every((other) => other.y <= platform.y);
+  const center = (platform.left + platform.right) / 2;
+  if (isHighest && Math.abs(center) < 1) return 'Top platform';
+  return center < 0 ? 'Left platform' : 'Right platform';
 }

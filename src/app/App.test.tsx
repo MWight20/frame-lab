@@ -123,7 +123,24 @@ describe('Trajectory Lab', () => {
     const percent = screen.getByLabelText('Victim percent (before the hit)');
     await user.clear(percent);
     await user.type(percent, '10');
-    expect(card('No DI').getByText('Survives')).toBeInTheDocument();
+    // At 10% the up smash doesn't KO; Marth comes back down on Final Destination.
+    expect(card('No DI').getByText(/^Lands on the main stage, frame \d+/)).toBeInTheDocument();
+  });
+
+  it('shows the staled damage and the tech in the results', async () => {
+    const user = userEvent.setup();
+    // Low enough that the up smash brings Marth back down on the stage instead of KOing.
+    useTrajectoryStore.setState({ victimPercent: 10 });
+    renderWithProviders(<App />);
+    const stale = screen.getByLabelText('Stale uses');
+    await user.clear(stale);
+    await user.type(stale, '3');
+    // Fox up smash deals 18%; used 3 times in a row it deals 18 × 0.76.
+    expect(card('No DI').getByText('13.68%')).toBeInTheDocument();
+    expect(card('No DI').getByText(/\(missed tech\)$/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('checkbox', { name: /Tech on landing/ }));
+    expect(card('No DI').getByText(/\(techs\)$/)).toBeInTheDocument();
   });
 
   it('changes the DI result when the stick moves', async () => {

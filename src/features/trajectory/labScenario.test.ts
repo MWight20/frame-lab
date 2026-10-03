@@ -33,6 +33,8 @@ function labInput(overrides: Partial<LabInput> = {}): LabInput {
     isCrouching: false,
     isAttackerFacingLeft: false,
     stick: NEUTRAL_STICK,
+    staleUses: 0,
+    techOnLanding: false,
     ...overrides,
   };
 }
