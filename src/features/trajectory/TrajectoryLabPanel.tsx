@@ -22,7 +22,11 @@ import { StageView } from './StageView';
 import { VictimPin } from './VictimPin';
 import classes from './trajectory.module.css';
 
-const STAGE_OPTIONS = STAGES.map((stage) => ({ value: stage.id, label: stage.shortName }));
+/** Initials keep the picker compact; hovering one shows the stage's full name. */
+const STAGE_OPTIONS = STAGES.map((stage) => ({
+  value: stage.id,
+  label: <span title={stage.name}>{stage.shortName}</span>,
+}));
 
 /**
  * The knockback and DI lab: pick a victim, percent, spot and DI, and see where the
@@ -36,9 +40,15 @@ export function TrajectoryLabPanel() {
   return (
     <section className={classes.panel} aria-labelledby="trajectory-lab-title">
       <div className={classes.header}>
-        <h2 className={classes.title} id="trajectory-lab-title">
-          Trajectory Lab
-        </h2>
+        <div className={classes.titleGroup}>
+          <h2 className={classes.title} id="trajectory-lab-title">
+            Trajectory Lab
+          </h2>
+          {/* The stage picker only shows initials, so name the current stage in full. */}
+          <span className={classes.stageName} aria-live="polite">
+            {stage.name}
+          </span>
+        </div>
         <SegmentedControl
           aria-label="Stage"
           size="xs"

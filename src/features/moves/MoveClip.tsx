@@ -22,7 +22,7 @@ interface MoveClipProps {
 /**
  * Plays public/clips/<characterId>/<moveId>.mp4 on a loop, with frame-by-frame controls.
  * Clips are expected to start on the move's first frame (see public/clips/README.md).
- * Without a clip file, it shows where to put one.
+ * Only rendered for moves that have a clip (see data/clips.ts).
  */
 export function MoveClip({
   characterId,
@@ -35,9 +35,10 @@ export function MoveClip({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [failedSrc, setFailedSrc] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [speed, setSpeed] = useState('1');
+  // Quarter speed by default, so individual frames are easy to follow.
+  const [speed, setSpeed] = useState('0.25');
   const [frame, setFrame] = useState<number | null>(null);
-  const hasClip = failedSrc !== src;
+  const hasFailed = failedSrc === src;
 
   const reportFrame = useCallback(() => {
     const video = videoRef.current;
@@ -49,17 +50,17 @@ export function MoveClip({
 
   // While playing, read the video's position every animation frame.
   useEffect(() => {
-    if (!hasClip || !isPlaying) return;
+    if (hasFailed || !isPlaying) return;
     let handle = requestAnimationFrame(function tick() {
       reportFrame();
       handle = requestAnimationFrame(tick);
     });
     return () => cancelAnimationFrame(handle);
-  }, [hasClip, isPlaying, reportFrame]);
+  }, [hasFailed, isPlaying, reportFrame]);
 
   useEffect(() => {
-    if (!hasClip) onFrameChange(null);
-  }, [hasClip, onFrameChange]);
+    if (hasFailed) onFrameChange(null);
+  }, [hasFailed, onFrameChange]);
 
   useEffect(() => {
     if (videoRef.current) videoRef.current.playbackRate = Number(speed);
@@ -90,48 +91,42 @@ export function MoveClip({
     reportFrame();
   }
 
+  // The file is listed but wouldn't play: say so in one line rather than show an empty player.
+  if (hasFailed) {
+    return <p className={classes.note}>The clip for this move couldn&apos;t be loaded.</p>;
+  }
+
   return (
     <>
       <div className={classes.clip}>
-        {hasClip ? (
-          <>
-            <video
-              key={src}
-              ref={videoRef}
-              src={src}
-              autoPlay
-              loop
-              muted
-              playsInline
-              aria-label={`${moveName} clip`}
-              onError={() => setFailedSrc(src)}
-              onSeeked={reportFrame}
-            />
-            {frame !== null && (
-              <span className={classes.frameBadge}>
-                Frame {frame}
-                {totalFrames ? ` of ${totalFrames}` : ''}
-              </span>
-            )}
-          </>
-        ) : (
-          <p className={classes.clipPlaceholder}>
-            No clip yet. Add one at{' '}
-            <code>
-              public/clips/{characterId}/{moveId}.mp4
-            </code>
-          </p>
+        <video
+          key={src}
+          ref={videoRef}
+          src={src}
+          autoPlay
+          loop
+          muted
+          playsInline
+          aria-label={`${moveName} clip`}
+          onError={() => setFailedSrc(src)}
+          onSeeked={reportFrame}
+        />
+        {frame !== null && (
+          <span className={classes.frameBadge}>
+            Frame {frame}
+            {totalFrames ? ` of ${totalFrames}` : ''}
+          </span>
         )}
       </div>
 
       <div className={classes.controls}>
-        <Button variant="default" disabled={!hasClip} onClick={() => stepFrames(-1)}>
+        <Button variant="default" onClick={() => stepFrames(-1)}>
           Previous frame
         </Button>
-        <Button disabled={!hasClip} onClick={togglePlaying} miw={84}>
+        <Button onClick={togglePlaying} miw={84}>
           {isPlaying ? 'Pause' : 'Play'}
         </Button>
-        <Button variant="default" disabled={!hasClip} onClick={() => stepFrames(1)}>
+        <Button variant="default" onClick={() => stepFrames(1)}>
           Next frame
         </Button>
         <div className={classes.spacer} />
@@ -140,18 +135,15 @@ export function MoveClip({
           data={SPEED_OPTIONS}
           value={speed}
           onChange={setSpeed}
-          disabled={!hasClip}
         />
       </div>
 
-      {hasClip && (
-        <p className={classes.clipCredit}>
-          Clip by{' '}
-          <Anchor href={CLIP_CREDIT.url} target="_blank" rel="noreferrer" inherit>
-            {CLIP_CREDIT.author}
-          </Anchor>
-        </p>
-      )}
+      <p className={classes.clipCredit}>
+        Clip by{' '}
+        <Anchor href={CLIP_CREDIT.url} target="_blank" rel="noreferrer" inherit>
+          {CLIP_CREDIT.author}
+        </Anchor>
+      </p>
     </>
   );
 }

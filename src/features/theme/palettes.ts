@@ -25,7 +25,6 @@ export interface PaletteTokens {
   headerBorder: string;
   headerControl: string;
   clipBg: string;
-  clipText: string;
   frameStartup: string;
   frameGap: string;
   frameRecovery: string;
@@ -77,7 +76,6 @@ export const PALETTES: Record<PaletteId, Palette> = {
       headerBorder: '#3A3D45',
       headerControl: '#2B2E36',
       clipBg: '#1B1D22',
-      clipText: '#C8C6BE',
       frameStartup: '#C9C4B4',
       frameGap: '#E4E0D4',
       frameRecovery: '#8C8F99',
@@ -117,7 +115,6 @@ export const PALETTES: Record<PaletteId, Palette> = {
       headerBorder: '#2E335E',
       headerControl: '#171A36',
       clipBg: '#07081A',
-      clipText: '#9AA0C8',
       frameStartup: '#3A3F6E',
       frameGap: '#262A52',
       frameRecovery: '#2F6F86',
@@ -157,7 +154,6 @@ export const PALETTES: Record<PaletteId, Palette> = {
       headerBorder: '#2A2A2E',
       headerControl: '#151517',
       clipBg: '#151517',
-      clipText: '#A3A3A8',
       frameStartup: '#3A3A40',
       frameGap: '#26262B',
       frameRecovery: '#6E6130',

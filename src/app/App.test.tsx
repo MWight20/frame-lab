@@ -23,6 +23,33 @@ describe('App', () => {
     expect(within(frameData).getByText('41')).toBeInTheDocument();
   });
 
+  it('plays clips at quarter speed by default', () => {
+    renderWithProviders(<App />);
+    expect(screen.getByRole('radio', { name: '¼×' })).toBeChecked();
+  });
+
+  it('leaves out the clip player for a move without a clip, but keeps its frame data', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    expect(screen.getByLabelText('Up Smash clip')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Forward Throw' }));
+    expect(screen.getByText('No clip')).toBeInTheDocument();
+    expect(screen.queryByLabelText('Forward Throw clip')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Next frame' })).not.toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Frame data' })).toBeInTheDocument();
+  });
+
+  it('names the selected stage in full next to the Trajectory Lab title', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    const lab = screen.getByRole('region', { name: 'Trajectory Lab' });
+    expect(within(lab).getByText('Final Destination', { selector: 'span' })).toBeInTheDocument();
+
+    await user.click(within(lab).getByRole('radio', { name: 'BF' }));
+    expect(within(lab).getByText('Battlefield', { selector: 'span' })).toBeInTheDocument();
+  });
+
   it('switches moves from the move list', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
