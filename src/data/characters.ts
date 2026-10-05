@@ -4,17 +4,27 @@ import type { CharacterData, Move, MoveCategory, RosterEntry } from './types';
 export const ROSTER: RosterEntry[] = rosterJson;
 
 /**
- * Every JSON file in ./characters is loaded automatically, so running the import
- * script for more characters is all it takes to add them to the app.
+ * Every JSON file in ./characters is picked up automatically, so running the import script
+ * for more characters is all it takes to add them to the app. Each file becomes its own
+ * small chunk that is only downloaded when that character is first needed; bundling all 26
+ * up front made the app's main file about 1.2 MB.
  */
-const characterFiles = import.meta.glob<CharacterData>('./characters/*.json', {
-  eager: true,
-  import: 'default',
-});
-
-const charactersById = new Map<string, CharacterData>(
-  Object.values(characterFiles).map((character) => [character.id, character]),
+const characterLoaders = new Map(
+  Object.entries(import.meta.glob<CharacterData>('./characters/*.json', { import: 'default' })).map(
+    ([path, load]) => [characterIdFromPath(path), load],
+  ),
 );
+
+function characterIdFromPath(path: string): string {
+  return path.slice(path.lastIndexOf('/') + 1, -'.json'.length);
+}
+
+/** Characters loaded so far. Data never changes once loaded, so nothing is evicted. */
+const loadedCharacters = new Map<string, CharacterData>();
+/** Characters whose download failed, so the UI can say so instead of waiting forever. */
+const failedCharacterIds = new Set<string>();
+const pendingLoads = new Map<string, Promise<CharacterData | undefined>>();
+const listeners = new Set<() => void>();
 
 export const DEFAULT_CHARACTER_ID = 'fox';
 
@@ -22,20 +32,67 @@ export function getRosterEntry(characterId: string): RosterEntry | undefined {
   return ROSTER.find((entry) => entry.id === characterId);
 }
 
-/** Returns undefined for characters whose data has not been imported yet. */
-export function getCharacterData(characterId: string): CharacterData | undefined {
-  return charactersById.get(characterId);
-}
-
+/** Whether frame data exists for this character, loaded or not. */
 export function hasCharacterData(characterId: string): boolean {
-  return charactersById.has(characterId);
+  return characterLoaders.has(characterId);
 }
 
-/** Characters whose data has been imported, in roster order. */
-export function getCharactersWithData(): CharacterData[] {
-  return ROSTER.map((entry) => charactersById.get(entry.id)).filter(
-    (character) => character !== undefined,
-  );
+/** Roster entries for characters with frame data, in roster order. Needs no loading. */
+export function getRosterWithData(): RosterEntry[] {
+  return ROSTER.filter((entry) => hasCharacterData(entry.id));
+}
+
+/**
+ * The character's data if it has been loaded, else undefined. Use `loadCharacterData` (or
+ * the `useCharacterData` hook in components) to load it.
+ */
+export function getCharacterData(characterId: string): CharacterData | undefined {
+  return loadedCharacters.get(characterId);
+}
+
+export function hasCharacterLoadFailed(characterId: string): boolean {
+  return failedCharacterIds.has(characterId);
+}
+
+/**
+ * Downloads the character's data once and caches it. Resolves to undefined for characters
+ * without data, or if the download fails (`hasCharacterLoadFailed` then says so).
+ */
+export function loadCharacterData(characterId: string): Promise<CharacterData | undefined> {
+  const loaded = loadedCharacters.get(characterId);
+  if (loaded) return Promise.resolve(loaded);
+  const load = characterLoaders.get(characterId);
+  if (!load) return Promise.resolve(undefined);
+
+  let pending = pendingLoads.get(characterId);
+  if (!pending) {
+    failedCharacterIds.delete(characterId);
+    pending = load()
+      .then((character) => {
+        loadedCharacters.set(characterId, character);
+        return character;
+      })
+      .catch(() => {
+        failedCharacterIds.add(characterId);
+        return undefined;
+      })
+      .finally(() => {
+        pendingLoads.delete(characterId);
+        notifyListeners();
+      });
+    pendingLoads.set(characterId, pending);
+  }
+  return pending;
+}
+
+/** Calls `listener` whenever a character finishes loading (or fails). Returns an unsubscribe. */
+export function subscribeToCharacterData(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+}
+
+function notifyListeners(): void {
+  for (const listener of listeners) listener();
 }
 
 export function findMove(character: CharacterData, moveId: string | null): Move | undefined {

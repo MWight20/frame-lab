@@ -1,5 +1,5 @@
 import { Button, Checkbox, NumberInput, SegmentedControl, Select } from '@mantine/core';
-import { getCharactersWithData } from '../../data/characters';
+import { getRosterWithData } from '../../data/characters';
 import type { Hit, Hitbox } from '../../data/types';
 import { STALE_QUEUE_LENGTH } from '../../engine';
 import { useTrajectoryStore } from '../../state/trajectoryStore';
@@ -39,9 +39,9 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
   const techOnLanding = useTrajectoryStore((state) => state.techOnLanding);
   const setTechOnLanding = useTrajectoryStore((state) => state.setTechOnLanding);
 
-  const victimOptions = getCharactersWithData().map((character) => ({
-    value: character.id,
-    label: character.name,
+  const victimOptions = getRosterWithData().map((entry) => ({
+    value: entry.id,
+    label: entry.name,
   }));
   const hitboxOptions = [
     { value: STRONGEST, label: `Strongest: ${describeHitbox(strongestHitbox)}` },

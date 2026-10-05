@@ -26,7 +26,7 @@ npm run rename:clips   # preview renaming clip-pack files to move ids; add `-- -
 
 Before calling any task done, run
 `npm run typecheck && npm run lint && npm test && npm run build && npm run format:check`.
-All five passed at the last update, with 173 tests.
+All five passed at the last update, with 176 tests, and the build prints no warnings.
 
 ## Git workflow
 
@@ -77,7 +77,8 @@ src/data/
   roster.json                  26 characters (id, name, shortName, source keys). Shared with the import script.
   characters/<id>.json         Generated frame data for all 26 characters
   types.ts                     CharacterData, Move, Hit, Hitbox, Stage, Platform, StageSurface
-  characters.ts                Loads characters/*.json with import.meta.glob; lookups; move grouping
+  characters.ts                Loads characters/*.json on demand (one chunk each) and caches them; lookups;
+                               move grouping
   clips.ts                     findClip: which clip file (or variant) plays for a move
   credits.ts                   Credits, source link and license shown in the UI
   stages.ts                    Six legal stages: blast zones, edgeX, platforms; getStageSurfaces
@@ -92,7 +93,8 @@ src/features/
   theme/                       palettes.ts (tokens), mantineTheme.ts (theme + CSS variables), ThemeProvider
   header/                      Logo, ThemeSelect, Trajectory Lab switch, About dialog (license, source,
                                credits), menu button and PhoneSettings for phones
-  characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
+  characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer,
+                               useCharacterData (loads a character for a component)
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
                                Joystick + joystickGeometry.ts (pointer/keyboard → stick value),
@@ -108,6 +110,8 @@ src/app/                       App (Mantine AppShell: 64px header, 250px navbar)
 
 Behavior worth knowing before you change things:
 
+- **Character data loads on demand.** Each `src/data/characters/<id>.json` is its own small chunk, downloaded the first time that character is shown (as attacker or victim) and cached. Components read it with `useCharacterData(id)` (`src/features/characters/`), which returns `ready`, `loading`, `failed` or `missing`; plain code can `await loadCharacterData(id)`. `getCharacterData(id)` only returns already-loaded data. Switching characters picks the move once the new data is in. Tests preload every character in `src/test/setup.ts`, so test code can call `getCharacterData` directly.
+- **Bundle.** `vite.config.ts` splits React and Mantine into their own chunks (`codeSplitting` groups), so the app's own code is about 70 kB and no chunk passes Vite's 500 kB warning.
 - **Adding characters.** Any JSON file added to `src/data/characters/` is picked up automatically. A roster character without data appears dimmed, with an empty state that shows the import command. Every character has data today, so the empty state is only tested with a made-up id.
 - **Roster drawer position.** It is fixed-position next to the navbar, using AppShell's `--app-shell-header-height` and `--app-shell-navbar-width` variables. If you change the shell dimensions, the drawer follows. On phones it spans the full width, over the move list panel.
 - **Phone layout.** Below Mantine's `sm` breakpoint (48em, 768px; `useIsPhone` and the AppShell navbar breakpoint must agree) the navbar collapses into a full-width panel behind a menu button in the header. Picking a move closes it. The header keeps only the menu button, a 40px logo and the lab switch (its label visually hidden); the theme picker and About move to `PhoneSettings` at the bottom of the panel. Stat grids drop to 2 and 3 columns. CSS uses `$mantine-breakpoint-sm` from `postcss.config.cjs`.
@@ -185,12 +189,10 @@ Trajectory tokens in all three palettes:
 
 All optional, roughly in priority order:
 
-1. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
-   data is bundled; Vite warns about it. Loading each character on demand would fix it.
-2. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
+1. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
    DI stick.
-3. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
-4. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
+2. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
+3. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
 
 ## Please don't
 

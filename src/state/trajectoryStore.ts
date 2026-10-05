@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { getCharactersWithData } from '../data/characters';
+import { getRosterWithData } from '../data/characters';
 import { NEUTRAL_STICK, type Point, type StickPosition } from '../engine';
 
 /**
@@ -44,7 +44,7 @@ const DEFAULT_PERCENT = 80;
 export const CENTER_STAGE: Point = { x: 0, y: 0 };
 
 function defaultVictimId(): string {
-  const withData = getCharactersWithData();
+  const withData = getRosterWithData();
   return (
     (withData.find((character) => character.id === PREFERRED_VICTIM_ID) ?? withData[0])?.id ??
     PREFERRED_VICTIM_ID
