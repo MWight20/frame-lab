@@ -38,3 +38,44 @@
   color: var(--fl-header-text);
   font-weight: 600;
 }
+
+.aboutButton {
+  color: var(--fl-header-text);
+}
+
+/* About dialog. It renders in a Mantine modal, on the page surface rather than the header. */
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.about p {
+  margin: 0;
+}
+
+.aboutHeading {
+  margin: 4px 0 0;
+  font-family: var(--fl-font-display);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.creditList {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.creditWhat {
+  font-weight: 600;
+}
+
+.disclaimer {
+  color: var(--fl-muted);
+  font-size: 12px;
+}

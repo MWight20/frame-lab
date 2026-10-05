@@ -87,7 +87,7 @@ still appear in the roster, dimmed, with a message explaining how to import them
 | Moves, hitboxes, weight              | [FightCore frame-data](https://github.com/FightCore/frame-data)                                                          | GPL-3.0                                                                       |
 | Gravity, fall speed, fast-fall speed | [libmelee](https://github.com/altf4/libmelee) `characterdata.csv`                                                        | LGPL-3.0                                                                      |
 | Blast zones, ledges, platforms       | [libmelee](https://github.com/altf4/libmelee) `stages.py`                                                                | LGPL-3.0                                                                      |
-| Character icons (once added)         | [SmashWiki](<https://www.ssbwiki.com/Category:Head_icons_(SSBM)>)                                                        | Credit SmashWiki; the art itself belongs to Nintendo                          |
+| Character icons                      | [SmashWiki](<https://www.ssbwiki.com/Category:Head_icons_(SSBM)>)                                                        | Credit SmashWiki; the art itself belongs to Nintendo                          |
 | Move clips                           | [Emi House's clip pack](https://drive.google.com/drive/folders/14rcZ8ed43hWOJaxQhHsB-hcAgxWubRaz), linked from FightCore | Free to use with credit (see below); the footage itself is of Nintendo's game |
 
 Knockback, DI and launch mechanics (`src/engine/`) were checked against
@@ -100,8 +100,8 @@ The clip pack's notes say: "Do as you please with them! Just give proper credit 
 The app credits Emi House under every clip, linking to the pack. The clips were downloaded in
 October 2026 and renamed to Frame Lab's move ids with `npm run rename:clips`.
 
-FightCore's data is GPL-3.0. Check what that license asks of you before publishing the app
-with the data bundled in.
+FightCore's data is GPL-3.0 and is bundled into the app, which is why Frame Lab itself is
+GPL-3.0 (see [License](#license)).
 
 ### Known data quirks
 
@@ -121,5 +121,18 @@ with the data bundled in.
 - **Icons:** see `public/icons/characters/README.md`.
 - **Clips:** see `public/clips/README.md`.
 
-Both are optional. The app shows a letter in place of a missing icon and a short note in
-place of a missing clip.
+Both are optional. The app shows a letter in place of a missing icon, and a "No clip" tag
+instead of the player for a move without a clip.
+
+## License
+
+Frame Lab is free software, licensed under the GNU General Public License v3.0 or later. The
+full text is in [LICENSE](LICENSE). The app bundles FightCore's GPL-3.0 frame data, so the
+whole app is distributed under the GPL; its About dialog links back to this repository so
+anyone using it can get the source.
+
+The third-party data and media keep their own terms; see
+[Sources and licenses](#sources-and-licenses).
+
+Frame Lab is a fan project, not affiliated with or endorsed by Nintendo. Super Smash Bros.
+Melee and its characters, icons and footage are trademarks and copyrights of Nintendo.

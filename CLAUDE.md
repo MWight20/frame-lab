@@ -79,7 +79,7 @@ src/data/
   types.ts                     CharacterData, Move, Hit, Hitbox, Stage, Platform, StageSurface
   characters.ts                Loads characters/*.json with import.meta.glob; lookups; move grouping
   clips.ts                     findClip: which clip file (or variant) plays for a move
-  credits.ts                   Credits shown in the UI (the clip pack)
+  credits.ts                   Credits, source link and license shown in the UI
   stages.ts                    Six legal stages: blast zones, edgeX, platforms; getStageSurfaces
 src/engine/                    Pure TS, no React:
   knockback.ts                 Knockback (scaling and set), crouch cancel, hitstun, tumble
@@ -90,7 +90,7 @@ src/engine/                    Pure TS, no React:
   killPercent.ts               simulateHit (whole chain for one hit) and findKillPercent
 src/features/
   theme/                       palettes.ts (tokens), mantineTheme.ts (theme + CSS variables), ThemeProvider
-  header/                      Logo, Theme select, Trajectory Lab switch
+  header/                      Logo, Theme select, Trajectory Lab switch, About dialog (license, source, credits)
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
@@ -140,7 +140,7 @@ SmashWiki. Kill percents in `killPercent.test.ts` match ikneedata exactly.
 
 ## Data sources and known quirks
 
-- **Moves, hitboxes, and weight:** from FightCore frame-data (GPL-3.0). The owner should review the GPL before publishing with the data bundled in.
+- **Moves, hitboxes, and weight:** from FightCore frame-data (GPL-3.0). Because this data is bundled into the app, Frame Lab itself is GPL-3.0-or-later (`LICENSE`, `package.json`). The GPL asks that users can get the source, so the header's About dialog links to the GitHub repo; keep that link, and keep the repo public once the app is published. Credits shown in the app live in `src/data/credits.ts`.
 - **Gravity, fall speed, and fast-fall speed:** from libmelee `characterdata.csv` (LGPL-3.0). FightCore's `gravity` field actually holds fall speed, so the importer ignores it. A test fails if gravity is ever 1 or higher.
 - **Move clips:** from Emi House's clip pack (Google Drive, linked from FightCore), which says
   "Do as you please with them! Just give proper credit if you can." Keep the credit under the
@@ -181,16 +181,14 @@ Trajectory tokens in all three palettes:
 
 All optional, roughly in priority order:
 
-1. **Licensing.** FightCore's GPL-3.0 data is bundled into the app. The owner chose to license
-   Frame Lab as GPL-3.0 (LICENSE file, package.json, a source link and credits in the app).
-2. **Phone layout.** The 250px navbar doesn't collapse, so the Trajectory Lab is cramped below
+1. **Phone layout.** The 250px navbar doesn't collapse, so the Trajectory Lab is cramped below
    about 600px wide.
-3. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
+2. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
    data is bundled; Vite warns about it. Loading each character on demand would fix it.
-4. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
+3. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
    DI stick.
-5. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
-6. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
+4. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
+5. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
 
 ## Please don't
 

@@ -2,6 +2,7 @@ import { Select, Switch } from '@mantine/core';
 import { useSelectionStore } from '../../state/selectionStore';
 import { usePalette } from '../theme/paletteContext';
 import { isPaletteId, PALETTE_OPTIONS } from '../theme/palettes';
+import { AboutButton } from './AboutDialog';
 import classes from './AppHeader.module.css';
 
 /**
@@ -17,6 +18,7 @@ export function AppHeader() {
       <img className={classes.logo} src={LOGO_SRC} alt="Frame Lab for Melee 1.02" />
       <ThemeSelect />
       <TrajectoryLabSwitch />
+      <AboutButton />
     </header>
   );
 }

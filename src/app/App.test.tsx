@@ -23,6 +23,21 @@ describe('App', () => {
     expect(within(frameData).getByText('41')).toBeInTheDocument();
   });
 
+  it('links to the source code and credits the data in the About dialog', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+    await user.click(screen.getByRole('button', { name: 'About' }));
+
+    const dialog = screen.getByRole('dialog', { name: 'About Frame Lab' });
+    expect(within(dialog).getByRole('link', { name: 'GitHub' })).toHaveAttribute(
+      'href',
+      'https://github.com/MWight20/frame-lab',
+    );
+    expect(within(dialog).getByRole('link', { name: 'GNU GPL v3.0 or later' })).toBeVisible();
+    expect(within(dialog).getByRole('link', { name: 'FightCore frame-data' })).toBeVisible();
+    expect(within(dialog).getByText(/not affiliated with or endorsed by Nintendo/)).toBeVisible();
+  });
+
   it('plays clips at quarter speed by default', () => {
     renderWithProviders(<App />);
     expect(screen.getByRole('radio', { name: '¼×' })).toBeChecked();
