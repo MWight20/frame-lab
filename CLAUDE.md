@@ -3,11 +3,12 @@
 Frame Lab is a front-end web app for Super Smash Bros. Melee. You pick a character, pick a
 move, and see a looping clip of it with its frame data. A toggleable Trajectory Lab shows a
 stage, takes the victim's percent and a DI input from an on-screen joystick, and draws where
-the victim gets launched and whether they cross a blast zone (lose a stock).
+the victim gets launched: whether they cross a blast zone (lose a stock), land on the stage,
+or survive.
 
-Steps 1 to 5 of the plan are done: the scaffold, themes, a clickable layout with real data
-for Fox and Marth, the knockback and DI engine in `src/engine/`, the DI joystick, and the
-working Trajectory Lab. Your job starts at step 6, content.
+The original six-step plan is complete: all 26 characters have frame data and icons, most
+moves have clips, and the knockback engine covers DI, staleness and landing with techs.
+What's left is optional; see "Open work" at the end.
 
 ## Commands
 
@@ -18,19 +19,29 @@ npm test               # Vitest, run once (npm run test:watch to watch)
 npm run lint           # ESLint
 npm run typecheck      # tsc -b
 npm run build          # typecheck + production build
-npm run format         # Prettier
+npm run format         # Prettier (format:check to check only)
 npm run import:data    # all 26 characters; add `-- --only fox,marth` for specific ones
 npm run rename:clips   # preview renaming clip-pack files to move ids; add `-- --apply` to rename
 ```
 
-Before calling any task done, run `npm run typecheck && npm run lint && npm test && npm run build`.
-All four passed after step 5 with 117 tests.
+Before calling any task done, run
+`npm run typecheck && npm run lint && npm test && npm run build && npm run format:check`.
+All five passed at the last update, with 170 tests.
+
+## Git workflow
+
+- `develop` is the base branch. Work on a feature branch and open a PR into `develop`.
+- The GitHub CLI isn't installed on the owner's machine. Push the branch, then give the owner a
+  `https://github.com/MWight20/frame-lab/compare/develop...<branch>?expand=1` link with a
+  title and description to paste.
+- `.gitattributes` keeps LF line endings in the working tree. Without it, `core.autocrlf` on
+  Windows checks files out as CRLF and `format:check` fails on files nobody changed.
 
 ## Stack
 
 | Tool       | Version | Notes                                                                                             |
 | ---------- | ------- | ------------------------------------------------------------------------------------------------- |
-| Vite       | 8       |                                                                                                   |
+| Vite       | 8       | Plus a small local plugin, `vite/clipManifestPlugin.ts`                                           |
 | React      | 19      |                                                                                                   |
 | TypeScript | ~6.0.3  | Pinned. Do not upgrade to 7: typescript-eslint requires TypeScript below 6.1.                     |
 | Mantine    | 9       | `@mantine/core` and `@mantine/hooks`                                                              |
@@ -44,9 +55,9 @@ The owner's top priority is code that a person can read and review easily.
 
 - **Naming and size.** Use clear names, small focused functions, and a short doc comment explaining why on anything that isn't obvious. Avoid clever one-liners.
 - **Folders.** Each feature folder keeps its components, `*.module.css`, and tests together. Pure logic goes in plain `.ts` files with no React.
-- **Colors come from tokens only.** Every color is a token in `src/features/theme/palettes.ts`, exposed as a CSS variable (`surface` becomes `var(--fl-surface)`). Never hard-code a color in a component or CSS module. If you need a new color, add the token to all three palettes; a test checks that the palettes stay in sync.
+- **Colors come from tokens only.** Every color is a token in `src/features/theme/palettes.ts`, exposed as a CSS variable (`surface` becomes `var(--fl-surface)`). Never hard-code a color in a component or CSS module. If you need a new color, add the token to all three palettes; a test checks that the palettes stay in sync. The one exception is the logo, `public/brand/frame-lab-melee-logo.svg`, a finished image with its own colors.
 - **Mantine for standard controls.** Use Mantine's Select, Switch, SegmentedControl, NumberInput, Button, and similar. Build custom components only when Mantine doesn't fit; the roster drawer and the joystick are custom.
-- **State.** Shared state lives in `src/state/selectionStore.ts`. Components read single fields with selectors, for example `useSelectionStore((s) => s.moveId)`.
+- **State.** Shared state lives in `src/state/selectionStore.ts`; settings only the Trajectory Lab uses live in `src/state/trajectoryStore.ts`. Components read single fields with selectors, for example `useSelectionStore((s) => s.moveId)`.
 - **Formatting.** Prettier is set to single quotes, semicolons, trailing commas, and 100 columns.
 - **Accessibility.**
   - Every control has a label.
@@ -54,40 +65,78 @@ The owner's top priority is code that a person can read and review easily.
   - Focus is visible.
   - `respectReducedMotion` is on in the Mantine theme.
 - **Tests.** Logic gets unit tests. `src/app/App.test.tsx` tests user-visible behavior through `renderWithProviders`, which runs Mantine in test mode with no transitions or portals.
+- **Engine sources.** Every physics constant in `src/engine/constants.ts` cites where its value comes from (the Melee decompilation, ikneedata's calculator, SmashWiki). Keep doing that.
 
 ## Architecture
 
 ```
 scripts/import-fightcore.mjs   FightCore + libmelee → src/data/characters/<id>.json
+scripts/rename-clips.mjs       Clip-pack file names → move ids
+vite/clipManifestPlugin.ts     virtual:clip-manifest: the list of files in public/clips, made at dev start and build
 src/data/
   roster.json                  26 characters (id, name, shortName, source keys). Shared with the import script.
-  types.ts                     CharacterData, Move, Hit, Hitbox, Stage, Platform
+  characters/<id>.json         Generated frame data for all 26 characters
+  types.ts                     CharacterData, Move, Hit, Hitbox, Stage, Platform, StageSurface
   characters.ts                Loads characters/*.json with import.meta.glob; lookups; move grouping
-  stages.ts                    Six legal stages: blast zones, edgeX, platforms
+  clips.ts                     findClip: which clip file (or variant) plays for a move
+  credits.ts                   Credits shown in the UI (the clip pack)
+  stages.ts                    Six legal stages: blast zones, edgeX, platforms; getStageSurfaces
+src/engine/                    Pure TS, no React:
+  knockback.ts                 Knockback (scaling and set), crouch cancel, hitstun, tumble
+  staleness.ts                 Stale-move queue and damage multiplier
+  launchAngle.ts, stick.ts     Sakurai angle, facing, DI; reading the stick
+  simulateLaunch.ts            Frame-by-frame flight: KO, landing, or survives
+  stageCollision.ts            Landing on the main stage and platforms (from above only)
+  killPercent.ts               simulateHit (whole chain for one hit) and findKillPercent
 src/features/
   theme/                       palettes.ts (tokens), mantineTheme.ts (theme + CSS variables), ThemeProvider
-  header/                      Wordmark, Theme select, Trajectory Lab switch
+  header/                      Logo, Theme select, Trajectory Lab switch
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
                                Joystick + joystickGeometry.ts (pointer/keyboard → stick value),
                                labScenario.ts (pure: hitbox choice, pin snapping, runs the engine),
                                LaunchOverlay, VictimPin, LabControls, ResultCard
-src/engine/                    Knockback, launch angle (Sakurai, DI), stick reading, launch simulation,
-                               kill-percent search. Pure TS; constants.ts cites a source for every value.
 src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen
 src/state/trajectoryStore.ts   victimId, victimPercent, isCrouching, stick, hitboxName, victimPosition,
-                               isAttackerFacingLeft (lab-only settings)
+                               isAttackerFacingLeft, staleUses, techOnLanding (lab-only settings)
 src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders
 ```
 
 Behavior worth knowing before you change things:
 
-- **Adding characters.** Any JSON file added to `src/data/characters/` is picked up automatically. Characters without data still appear in the roster, dimmed, with an empty state that shows the import command.
+- **Adding characters.** Any JSON file added to `src/data/characters/` is picked up automatically. A roster character without data appears dimmed, with an empty state that shows the import command. Every character has data today, so the empty state is only tested with a made-up id.
 - **Roster drawer position.** It is fixed-position next to the navbar, using AppShell's `--app-shell-header-height` and `--app-shell-navbar-width` variables. If you change the shell dimensions, the drawer follows.
-- **Clip files.** The player looks for `public/clips/<characterId>/<moveId>.mp4` and counts frames as `floor(currentTime * 60) + 1`. It assumes a clip's first frame is the move's frame 1.
+- **Clip files.** Clips are `public/clips/<characterId>/<moveId>.mp4`. The page only knows about files that existed when the dev server started or the app was built (the clip manifest); in dev, adding or removing a clip reloads the page. Moves without a clip show a "No clip" tag and no player. The player counts frames as `floor(currentTime * 60) + 1` and assumes a clip's first frame is the move's frame 1. It defaults to ¼ speed.
 - **Icon files.** Icons are `public/icons/characters/<characterId>.png`, 24 × 24 pixel art, shown at exactly 24px and 48px with `image-rendering: pixelated`.
+- **Joystick.** "Hold position" is on by default, so a DI choice stays put. The deadzone is drawn as a dashed square because the game zeroes each axis separately. Shift + arrow moves one controller step (1/80).
+- **Victim pin.** Pressing or dragging on the stage moves the victim. Within 4 units of the main stage or a platform it snaps on and counts as grounded; anywhere else is airborne. The pin marks the victim, not the attacker: Melee's launch angle comes from the hitbox and facing, not positions.
 - **Saved preferences.** The only localStorage key is `frame-lab:theme`.
+
+## Engine decisions
+
+Checked against the Melee decompilation (doldecomp/melee), ikneedata's calculator source and
+SmashWiki. Kill percents in `killPercent.test.ts` match ikneedata exactly.
+
+- `victimPercent` is the percent **before** the hit; the engine adds the damage.
+- Crouch cancel is 2/3 (ikneedata uses 0.667). Set knockback still uses the victim's weight;
+  `isWeightIndependent` means the same as `setKnockback > 0`. Throws use weight 100.
+- Sakurai angle for airborne victims is 45° (SmashWiki; the decomp uses a separate constant);
+  ikneedata uses 44°.
+- **Staleness:** 9 slots weighted 0.09 down to 0.01, no freshness bonus. The staled damage
+  goes into the victim's percent `p`, but `d` stays the full damage. Set knockback ignores
+  staleness. The lab's "Stale uses" counts the most recent slots.
+- **Landing:** surfaces block only from above, so victims fly up through platforms and land on
+  them coming down. Landing ends the flight; Melee has no floor bounce for an airborne
+  victim, only a tech or a knockdown. Only tumbling victims (knockback 80+) can tech.
+- **Grounded downward hits:** tumbling victims bounce (vertical speed × 0.8) only when the
+  launch points more than 10° into the floor; shallower hits land at once. Non-tumble
+  victims stay on the floor.
+- The simulation stops at a KO, a landing, or once hitstun is over and launch speed has
+  decayed. So a KO or landing can come after hitstun; the result card says so.
+- **Not modelled:** walls and ceilings (the stages' side and underside shapes aren't in the
+  data, and the bounce speed threshold is unconfirmed), ASDI/SDI, tech-roll distance, the
+  slide after landing, traction. Fountain of Dreams' moving platforms use a nominal height.
 
 ## Data sources and known quirks
 
@@ -99,10 +148,12 @@ Behavior worth knowing before you change things:
   pack's names (`uSmash`, `AirNB`, `fSmashHi`) to move ids (`usmash`, `aneutralb`, `fsmash-hi`).
   Variants after a hyphen are played only when a move has no plain clip: a hand-picked one
   (`PREFERRED_VARIANTS` in `src/data/clips.ts`), else `-uncharged`, else the first
-  alphabetically. The title row then shows which variant is playing.
+  alphabetically. The title row then shows which variant is playing. Grabs, pummels and
+  throws have no clips in the pack.
 - **Stage geometry:** from libmelee `stages.py`.
   - Yoshi's Story has asymmetric side blast zones (−175.7 and 173.6). This is correct, not a typo.
-  - Fountain of Dreams side platforms move during a match. They are drawn at a nominal height of 20, marked in the code as display-only.
+  - Fountain of Dreams side platforms move during a match. They use a nominal height of 20.
+  - The shape drawn under each stage in `StageView` is decorative, not game geometry.
 - **Hits without frame windows.** Some FightCore hits have no window, for example Fox's back air ("clean" and "late") and his up special. These have `startFrame`/`endFrame` set to `null`. For a single-hit move, the importer falls back to the move's active frames.
 - **Placeholder moves.** FightCore has empty "Unknown_air" entries for Kirby and Pikachu (no
   frames, no hits). The importer skips any move whose id starts with `unknown`.
@@ -116,123 +167,30 @@ The approved layout is board D ("Merged workstation") on the design canvas. The 
 - **Final Destination** (navy and amber)
 - **Hitbox** (black, red, and blue)
 
-Trajectory tokens already exist in all three palettes:
+Trajectory tokens in all three palettes:
 
-| Token                       | Use                               |
-| --------------------------- | --------------------------------- |
-| `di`                        | Path with the chosen DI           |
-| `ghost`                     | Faint no-DI path behind it        |
-| `victim`                    | Victim's starting dot             |
-| `danger` / `danger-bg`      | Blast zone and KO result          |
-| `gate-fill` / `gate-stroke` | Joystick gate and deadzone marker |
+| Token                       | Use                                         |
+| --------------------------- | ------------------------------------------- |
+| `di`                        | Path with the chosen DI, its landing marker |
+| `ghost`                     | Faint no-DI path behind it, its markers     |
+| `victim`                    | Victim's starting dot                       |
+| `danger` / `danger-bg`      | Blast zone and KO result                    |
+| `gate-fill` / `gate-stroke` | Joystick gate and deadzone marker           |
 
-The mockup's Trajectory Lab is laid out as:
+## Open work
 
-- stage drawing on top
-- joystick bottom-left with an angle readout
-- inputs for victim, percent, and a crouch-cancel checkbox
-- two result cards: "No DI" and "With this DI"
+All optional, roughly in priority order:
 
-## Remaining steps
-
-### Step 3: knockback and DI engine (`src/engine/`), done
-
-Checked against the Melee decompilation, ikneedata's calculator source and SmashWiki.
-Kill percents in `killPercent.test.ts` match ikneedata exactly. Decisions worth knowing:
-
-- `victimPercent` is the percent **before** the hit; the engine adds the damage.
-- Crouch cancel is 2/3 (ikneedata uses 0.667). Set knockback still uses the victim's weight;
-  `isWeightIndependent` means the same as `setKnockback > 0`.
-- Sakurai angle for airborne victims is 45° (SmashWiki, decomp uses a separate constant);
-  ikneedata uses 44°.
-- The simulation runs until launch speed decays, so a KO can be reported after hitstun.
-- Not modelled: stage collision during flight, techs, ASDI/SDI, traction, staleness.
-
-The original plan for this step follows, for reference.
-
-Write this as pure TypeScript with no React, fully unit-tested before any UI uses it.
-
-**Verify the details before coding.** Check each mechanic against SmashWiki's Melee knockback, DI, and hitstun pages and against ikneedata.com's calculator. Note the source in a comment next to each constant. The values below are the plan's starting point, not verified facts.
-
-- **Knockback (scaling).** `p` is the victim's percent after the hit, `d` damage, `w` weight, `s` knockback growth, `b` base knockback, `r` ratio:
-  `kb = ((((p/10 + p*d/20) * 200/(w+100) * 1.4) + 18) * s/100 + b) * r`
-- **Set knockback.** Hitboxes with `setKnockback > 0` use a variant of the formula where the damage term is fixed. Confirm its exact form, and how `isWeightIndependent` affects it.
-- **Crouch cancel.** Multiplies knockback by about 2/3. Confirm the exact multiplier.
-- **Hitstun:** `floor(kb * 0.4)` frames.
-- **Tumble:** happens at `kb >= 80`.
-- **Launch speed.** Initial speed is `kb * 0.03` units per frame along the launch angle. It decays by about 0.051 per frame along that same direction.
-- **Gravity.** The victim's own vertical velocity builds up by `gravity` each frame, capped at `fallSpeed`. Each frame's position change is the launch velocity plus that vertical velocity. Confirm whether fast-fall is possible during hitstun; it should not be.
-- **Sakurai angle (361).** Grounded and aerial victims get different angles, and the result also depends on knockback for grounded victims. Look up the exact thresholds.
-- **DI.** Rotates the launch angle by up to 18°, based on how far the stick is perpendicular to the launch direction. Confirm:
-  - the scaling curve (linear or squared)
-  - the stick deadzone
-  - how stick values map to the −80..80 range
-- **Blast zones.**
-  - **Sides and bottom:** a KO happens as soon as the victim crosses them.
-  - **Top:** confirm the condition (the victim must still be in tumble/hitstun, with enough upward speed).
-  - Return the frame the KO happens and where, or "survives" with the hitstun end position.
-- **Later, optional:** ASDI, ground bounce or tech, staleness.
-
-Suggested API:
-
-```ts
-calculateKnockback(input): number
-resolveLaunchAngle(angle, { knockback, isGrounded, stick }): number
-simulateLaunch({ knockback, angle, start, victim, stage }): { path: Point[]; hitstunFrames; outcome }
-```
-
-`outcome` is either `{ type: 'ko', side, frame }` or `{ type: 'survives', hitstunEnd }`.
-
-**Tests.** Include regression cases against known kill percents from ikneedata. For example, compare the engine's kill percent for Fox up smash against Marth on Final Destination with no DI to ikneedata's result. Also test the edge cases: a stick inside the deadzone, an angle of 361, and set knockback.
-
-### Step 4: joystick (`src/features/trajectory/Joystick.tsx`), done
-
-Built as planned, with two deliberate differences: the deadzone is drawn as a dashed
-**square**, because the game zeroes each axis separately (a ring would be wrong), and the
-optional `useGamepad` hook is not built yet. Shift + arrow moves one controller step (1/80).
-The panel holds the stick in local state for now; step 5 moves it to the store.
-
-The original plan for this step follows, for reference.
-
-- **Props:** `{ value: { x, y }, onChange }`, with values clamped to magnitude 1.
-- **Drawing:** an SVG octagonal gate like the GameCube stick, with a dashed deadzone ring.
-- **Input:** pointer events with `setPointerCapture`, so mouse and touch both work.
-- **Behavior:**
-  - The stick snaps back to neutral on release, unless a lock toggle is on.
-  - Arrow keys nudge it when it has focus.
-  - A "Reset to neutral" button returns it to center.
-- **Readout:** the angle in degrees and the raw −80..80 coordinates.
-- **Optional:** a `useGamepad` hook that polls the Gamepad API in `requestAnimationFrame`, so a real controller can drive the stick.
-
-### Step 5: wire up the Trajectory Lab, done
-
-Built as planned, plus a draggable victim pin and an attacker-facing toggle:
-
-- **Pin:** pressing or dragging anywhere on the stage moves the victim there. Within 4 units
-  of the main stage or a platform it snaps on and counts as grounded; anywhere else is
-  airborne (Sakurai 45°, no crouch cancel). Arrow keys move it without snapping (Shift for
-  10 units). The pin marks the victim, not the attacker: Melee's launch angle comes from the
-  hitbox and facing, not the two characters' positions.
-- **Hits:** the lab uses the hit selected in the frame data panel. Grab boxes (effect
-  "Grab") and pummels don't launch, so those moves show an explanation instead.
-- **Results:** each card shows the outcome, angle, knockback, hitstun, and the lowest
-  kill percent from the current spot (`findKillPercent`, about 1 to 6 ms per update).
-- **Known gap:** the app shell's 250px navbar doesn't collapse on phones, so the lab is
-  cramped below about 600px wide.
-
-The original plan for this step follows, for reference.
-
-In `TrajectoryLabPanel`, add:
-
-- **Inputs:** victim select (characters with data only), percent `NumberInput`, crouch-cancel checkbox, the joystick, and a picker for which hitbox to use. Default to the strongest hitbox of the selected hit.
-- **Drawing in `StageView`:** the faint no-DI ghost path, the DI path with frame dots, a ring where hitstun ends, and a KO marker where a blast zone is crossed.
-- **Results:** two cards, "No DI" and "With this DI".
-- **Store:** put the new state (victim, percent, stick, crouch cancel) in `selectionStore` or a small store of its own.
-- **Moves without hitboxes:** show a short explanation instead of the controls.
-
-### Step 6: content
-
-The owner will drop icons and clips into `public/`; no code changes are needed for those. Run `npm run import:data` for the full roster, then spot-check a few characters against FightCore or meleeframedata.com.
+1. **Licensing.** FightCore's GPL-3.0 data is bundled into the app. The owner chose to license
+   Frame Lab as GPL-3.0 (LICENSE file, package.json, a source link and credits in the app).
+2. **Phone layout.** The 250px navbar doesn't collapse, so the Trajectory Lab is cramped below
+   about 600px wide.
+3. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
+   data is bundled; Vite warns about it. Loading each character on demand would fix it.
+4. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
+   DI stick.
+5. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
+6. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
 
 ## Please don't
 
