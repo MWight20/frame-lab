@@ -26,7 +26,7 @@ npm run rename:clips   # preview renaming clip-pack files to move ids; add `-- -
 
 Before calling any task done, run
 `npm run typecheck && npm run lint && npm test && npm run build && npm run format:check`.
-All five passed at the last update, with 170 tests.
+All five passed at the last update, with 173 tests.
 
 ## Git workflow
 
@@ -90,23 +90,27 @@ src/engine/                    Pure TS, no React:
   killPercent.ts               simulateHit (whole chain for one hit) and findKillPercent
 src/features/
   theme/                       palettes.ts (tokens), mantineTheme.ts (theme + CSS variables), ThemeProvider
-  header/                      Logo, Theme select, Trajectory Lab switch, About dialog (license, source, credits)
+  header/                      Logo, ThemeSelect, Trajectory Lab switch, About dialog (license, source,
+                               credits), menu button and PhoneSettings for phones
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
   trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
                                Joystick + joystickGeometry.ts (pointer/keyboard → stick value),
                                labScenario.ts (pure: hitbox choice, pin snapping, runs the engine),
                                LaunchOverlay, VictimPin, LabControls, ResultCard
-src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen
+src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen,
+                               isMoveListOpen (phones only)
 src/state/trajectoryStore.ts   victimId, victimPercent, isCrouching, stick, hitboxName, victimPosition,
                                isAttackerFacingLeft, staleUses, techOnLanding (lab-only settings)
-src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders
+src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders,
+                               useIsPhone (below the `sm` breakpoint)
 ```
 
 Behavior worth knowing before you change things:
 
 - **Adding characters.** Any JSON file added to `src/data/characters/` is picked up automatically. A roster character without data appears dimmed, with an empty state that shows the import command. Every character has data today, so the empty state is only tested with a made-up id.
-- **Roster drawer position.** It is fixed-position next to the navbar, using AppShell's `--app-shell-header-height` and `--app-shell-navbar-width` variables. If you change the shell dimensions, the drawer follows.
+- **Roster drawer position.** It is fixed-position next to the navbar, using AppShell's `--app-shell-header-height` and `--app-shell-navbar-width` variables. If you change the shell dimensions, the drawer follows. On phones it spans the full width, over the move list panel.
+- **Phone layout.** Below Mantine's `sm` breakpoint (48em, 768px; `useIsPhone` and the AppShell navbar breakpoint must agree) the navbar collapses into a full-width panel behind a menu button in the header. Picking a move closes it. The header keeps only the menu button, a 40px logo and the lab switch (its label visually hidden); the theme picker and About move to `PhoneSettings` at the bottom of the panel. Stat grids drop to 2 and 3 columns. CSS uses `$mantine-breakpoint-sm` from `postcss.config.cjs`.
 - **Clip files.** Clips are `public/clips/<characterId>/<moveId>.mp4`. The page only knows about files that existed when the dev server started or the app was built (the clip manifest); in dev, adding or removing a clip reloads the page. Moves without a clip show a "No clip" tag and no player. The player counts frames as `floor(currentTime * 60) + 1` and assumes a clip's first frame is the move's frame 1. It defaults to ¼ speed.
 - **Icon files.** Icons are `public/icons/characters/<characterId>.png`, 24 × 24 pixel art, shown at exactly 24px and 48px with `image-rendering: pixelated`.
 - **Joystick.** "Hold position" is on by default, so a DI choice stays put. The deadzone is drawn as a dashed square because the game zeroes each axis separately. Shift + arrow moves one controller step (1/80).
@@ -181,14 +185,12 @@ Trajectory tokens in all three palettes:
 
 All optional, roughly in priority order:
 
-1. **Phone layout.** The 250px navbar doesn't collapse, so the Trajectory Lab is cramped below
-   about 600px wide.
-2. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
+1. **Bundle size.** The main JS file is about 1.24 MB (200 kB gzipped) because all character
    data is bundled; Vite warns about it. Loading each character on demand would fix it.
-3. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
+2. **Gamepad.** A `useGamepad` hook polling the Gamepad API so a real controller can drive the
    DI stick.
-4. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
-5. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
+3. **Engine:** walls and ceilings, ASDI/SDI, tech-roll distance, the slide after landing.
+4. **Clips:** 147 moves have none, mostly grabs and throws. Only new footage changes this.
 
 ## Please don't
 

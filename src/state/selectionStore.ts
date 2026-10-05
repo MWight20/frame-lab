@@ -15,6 +15,11 @@ interface SelectionState {
   stageId: string;
   isRosterOpen: boolean;
   isTrajectoryLabOpen: boolean;
+  /**
+   * Whether the character and move list is showing on phones, where it collapses behind a
+   * menu button. Wider screens always show it and ignore this.
+   */
+  isMoveListOpen: boolean;
 
   selectCharacter: (characterId: string) => void;
   selectMove: (moveId: string) => void;
@@ -24,6 +29,8 @@ interface SelectionState {
   closeRoster: () => void;
   toggleRoster: () => void;
   setTrajectoryLabOpen: (isOpen: boolean) => void;
+  toggleMoveList: () => void;
+  closeMoveList: () => void;
 }
 
 const DEFAULT_MOVE_ID = 'usmash';
@@ -43,6 +50,7 @@ export const useSelectionStore = create<SelectionState>()((set) => ({
   stageId: DEFAULT_STAGE_ID,
   isRosterOpen: false,
   isTrajectoryLabOpen: true,
+  isMoveListOpen: false,
 
   selectCharacter: (characterId) =>
     set((state) => ({
@@ -51,11 +59,14 @@ export const useSelectionStore = create<SelectionState>()((set) => ({
       hitIndex: 0,
       isRosterOpen: false,
     })),
-  selectMove: (moveId) => set({ moveId, hitIndex: 0 }),
+  // On phones, picking a move closes the list so the move itself is on screen.
+  selectMove: (moveId) => set({ moveId, hitIndex: 0, isMoveListOpen: false }),
   selectHit: (hitIndex) => set({ hitIndex }),
   selectStage: (stageId) => set({ stageId }),
   openRoster: () => set({ isRosterOpen: true }),
   closeRoster: () => set({ isRosterOpen: false }),
   toggleRoster: () => set((state) => ({ isRosterOpen: !state.isRosterOpen })),
   setTrajectoryLabOpen: (isOpen) => set({ isTrajectoryLabOpen: isOpen }),
+  toggleMoveList: () => set((state) => ({ isMoveListOpen: !state.isMoveListOpen })),
+  closeMoveList: () => set({ isMoveListOpen: false }),
 }));

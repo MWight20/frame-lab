@@ -1,8 +1,7 @@
-import { Select, Switch } from '@mantine/core';
+import { Burger, Switch } from '@mantine/core';
 import { useSelectionStore } from '../../state/selectionStore';
-import { usePalette } from '../theme/paletteContext';
-import { isPaletteId, PALETTE_OPTIONS } from '../theme/palettes';
 import { AboutButton } from './AboutDialog';
+import { ThemeSelect } from './ThemeSelect';
 import classes from './AppHeader.module.css';
 
 /**
@@ -12,39 +11,48 @@ import classes from './AppHeader.module.css';
  */
 const LOGO_SRC = `${import.meta.env.BASE_URL}brand/frame-lab-melee-logo.svg`;
 
-export function AppHeader() {
-  return (
-    <header className={classes.header}>
-      <img className={classes.logo} src={LOGO_SRC} alt="Frame Lab for Melee 1.02" />
-      <ThemeSelect />
-      <TrajectoryLabSwitch />
-      <AboutButton />
-    </header>
-  );
+export const MOVE_LIST_ID = 'move-list-panel';
+
+interface AppHeaderProps {
+  /**
+   * The phone layout: a menu button for the move list, a smaller logo and the lab switch.
+   * The theme picker and About move into the move list panel (see PhoneSettings).
+   */
+  isCompact: boolean;
 }
 
-function ThemeSelect() {
-  const { paletteId, setPaletteId } = usePalette();
-
+export function AppHeader({ isCompact }: AppHeaderProps) {
   return (
-    <div className={classes.control}>
-      <label htmlFor="theme-select">Theme</label>
-      <Select
-        id="theme-select"
-        data={PALETTE_OPTIONS}
-        value={paletteId}
-        onChange={(value) => {
-          if (isPaletteId(value)) setPaletteId(value);
-        }}
-        allowDeselect={false}
-        checkIconPosition="right"
-        classNames={{ input: classes.selectInput }}
-      />
+    // AppShell.Header is already the page's <header> landmark, so this is a plain div.
+    <div className={classes.header} data-compact={isCompact || undefined}>
+      {isCompact && <MoveListButton />}
+      <img className={classes.logo} src={LOGO_SRC} alt="Frame Lab for Melee 1.02" />
+      {!isCompact && <ThemeSelect inHeader />}
+      <TrajectoryLabSwitch isCompact={isCompact} />
+      {!isCompact && <AboutButton />}
     </div>
   );
 }
 
-function TrajectoryLabSwitch() {
+/** Opens and closes the collapsed move list on phones. */
+function MoveListButton() {
+  const isOpen = useSelectionStore((state) => state.isMoveListOpen);
+  const toggle = useSelectionStore((state) => state.toggleMoveList);
+
+  return (
+    <Burger
+      opened={isOpen}
+      onClick={toggle}
+      size="sm"
+      color="var(--fl-header-text)"
+      aria-label={isOpen ? 'Hide move list' : 'Show move list'}
+      aria-expanded={isOpen}
+      aria-controls={MOVE_LIST_ID}
+    />
+  );
+}
+
+function TrajectoryLabSwitch({ isCompact }: { isCompact: boolean }) {
   const isOpen = useSelectionStore((state) => state.isTrajectoryLabOpen);
   const setOpen = useSelectionStore((state) => state.setTrajectoryLabOpen);
 
@@ -55,7 +63,8 @@ function TrajectoryLabSwitch() {
       size="md"
       checked={isOpen}
       onChange={(event) => setOpen(event.currentTarget.checked)}
-      classNames={{ label: classes.switchLabel }}
+      // On phones the label is hidden to save space but still read by screen readers.
+      classNames={{ label: isCompact ? classes.visuallyHidden : classes.switchLabel }}
     />
   );
 }

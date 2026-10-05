@@ -14,12 +14,16 @@ import classes from './AppHeader.module.css';
  * source (which the GPL asks for), where the data and media come from, and a Nintendo
  * disclaimer.
  */
-export function AboutButton() {
+export function AboutButton({ inHeader = true }: { inHeader?: boolean }) {
   const [isOpen, { open, close }] = useDisclosure(false);
 
   return (
     <>
-      <Button variant="subtle" onClick={open} classNames={{ root: classes.aboutButton }}>
+      <Button
+        variant={inHeader ? 'subtle' : 'default'}
+        onClick={open}
+        classNames={inHeader ? { root: classes.aboutButton } : undefined}
+      >
         About
       </Button>
       <Modal opened={isOpen} onClose={close} title="About Frame Lab" size="lg">

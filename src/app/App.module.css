@@ -30,3 +30,11 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Phones: less padding so the move viewer and lab get the screen's full width. */
+@media (max-width: $mantine-breakpoint-sm) {
+  .workArea {
+    padding: 12px;
+    gap: 16px;
+  }
+}

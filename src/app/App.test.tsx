@@ -1,6 +1,6 @@
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSelectionStore } from '../state/selectionStore';
 import { useTrajectoryStore } from '../state/trajectoryStore';
 import { renderWithProviders } from '../test/renderWithProviders';
@@ -187,5 +187,58 @@ describe('Trajectory Lab', () => {
     await user.click(screen.getByRole('button', { name: 'Grab' }));
     expect(screen.getByText(/Grab doesn't launch anyone/)).toBeInTheDocument();
     expect(screen.queryByRole('region', { name: 'No DI' })).not.toBeInTheDocument();
+  });
+});
+
+describe('phone layout', () => {
+  // The test setup's matchMedia never matches; make the phone query match instead.
+  beforeEach(() => {
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (query: string) =>
+        ({
+          matches: query.includes('max-width'),
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }) as MediaQueryList,
+    );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('moves the theme picker and About into the move list panel', () => {
+    renderWithProviders(<App />);
+    const header = screen.getByRole('banner');
+    expect(within(header).queryByRole('button', { name: 'About' })).not.toBeInTheDocument();
+
+    const settings = screen.getByRole('region', { name: 'Settings' });
+    expect(within(settings).getByText('Theme', { selector: 'label' })).toBeInTheDocument();
+    expect(within(settings).getByRole('button', { name: 'About' })).toBeInTheDocument();
+    // The lab switch keeps its name even though its label is hidden on screen.
+    expect(within(header).getByRole('switch', { name: 'Trajectory Lab' })).toBeInTheDocument();
+  });
+
+  it('opens the move list from the menu button and closes it after picking a move', async () => {
+    const user = userEvent.setup();
+    renderWithProviders(<App />);
+
+    await user.click(screen.getByRole('button', { name: 'Show move list' }));
+    expect(screen.getByRole('button', { name: 'Hide move list' })).toHaveAttribute(
+      'aria-expanded',
+      'true',
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Neutral Air' }));
+    expect(screen.getByRole('heading', { level: 1, name: 'Neutral Air' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Show move list' })).toHaveAttribute(
+      'aria-expanded',
+      'false',
+    );
   });
 });
