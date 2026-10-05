@@ -182,3 +182,13 @@
 .tile[data-has-data='false'] {
   opacity: 0.55;
 }
+
+/* Phones: the move list is a full-width panel, so the roster opens over it instead of
+   beside it (the navbar width variable is 100% there). */
+@media (max-width: $mantine-breakpoint-sm) {
+  .drawer {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}
