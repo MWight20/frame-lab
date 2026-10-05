@@ -1,6 +1,7 @@
-import { getCharacterData, getRosterEntry } from '../../data/characters';
+import { getRosterEntry } from '../../data/characters';
 import { useSelectionStore } from '../../state/selectionStore';
 import { CharacterIcon } from './CharacterIcon';
+import { useCharacterData } from './useCharacterData';
 import classes from './characters.module.css';
 
 export const ROSTER_DRAWER_ID = 'roster-drawer';
@@ -12,7 +13,10 @@ export function CharacterPanel() {
   const toggleRoster = useSelectionStore((state) => state.toggleRoster);
 
   const entry = getRosterEntry(characterId);
-  const attributes = getCharacterData(characterId)?.attributes;
+  const characterData = useCharacterData(characterId);
+  // The stats show "—" until the character's data has loaded.
+  const attributes =
+    characterData.status === 'ready' ? characterData.character.attributes : undefined;
   const name = entry?.name ?? characterId;
 
   return (

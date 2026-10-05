@@ -1,11 +1,12 @@
 import { SegmentedControl } from '@mantine/core';
 import { useId, useMemo } from 'react';
-import { findMove, getCharacterData } from '../../data/characters';
+import { findMove } from '../../data/characters';
 import { getStage, STAGES } from '../../data/stages';
 import type { CharacterData, Hit, Move, Stage } from '../../data/types';
 import type { Point } from '../../engine';
 import { useSelectionStore } from '../../state/selectionStore';
 import { useTrajectoryStore } from '../../state/trajectoryStore';
+import { useCharacterData } from '../characters/useCharacterData';
 import { Joystick } from './Joystick';
 import { LabControls } from './LabControls';
 import {
@@ -69,11 +70,14 @@ function LabBody({ stage }: { stage: Stage }) {
   const hitIndex = useSelectionStore((state) => state.hitIndex);
   const victimId = useTrajectoryStore((state) => state.victimId);
 
-  const attacker = getCharacterData(characterId);
-  const move = attacker ? findMove(attacker, moveId) : undefined;
-  const victim = getCharacterData(victimId);
+  const attacker = useCharacterData(characterId);
+  const victim = useCharacterData(victimId);
 
-  if (!move || !victim) {
+  if (attacker.status === 'loading' || victim.status === 'loading') {
+    return <EmptyStage stage={stage} message="Loading frame data…" />;
+  }
+  const move = attacker.status === 'ready' ? findMove(attacker.character, moveId) : undefined;
+  if (!move || victim.status !== 'ready') {
     return <EmptyStage stage={stage} message="Pick a character with frame data to launch." />;
   }
   if (launchingHits(move).length === 0) {
@@ -89,7 +93,7 @@ function LabBody({ stage }: { stage: Stage }) {
       stage={stage}
       move={move}
       hit={pickLaunchingHit(move, hitIndex)}
-      victim={victim}
+      victim={victim.character}
     />
   );
 }

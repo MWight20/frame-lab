@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { getCharacterData, groupMovesByCategory, ROSTER } from './characters';
+import {
+  getCharacterData,
+  getRosterWithData,
+  groupMovesByCategory,
+  hasCharacterData,
+  loadCharacterData,
+  ROSTER,
+} from './characters';
 import { STAGES } from './stages';
 
 const importedCharacters = ROSTER.map((entry) => getCharacterData(entry.id)).filter(
@@ -10,6 +17,27 @@ describe('roster', () => {
   it('has all 26 characters with unique ids', () => {
     expect(ROSTER).toHaveLength(26);
     expect(new Set(ROSTER.map((entry) => entry.id)).size).toBe(26);
+  });
+});
+
+describe('loading character data', () => {
+  it('knows which characters have data without loading them', () => {
+    expect(hasCharacterData('fox')).toBe(true);
+    expect(hasCharacterData('not-imported')).toBe(false);
+    expect(getRosterWithData().map((entry) => entry.id)).toEqual(ROSTER.map((entry) => entry.id));
+  });
+
+  it('loads each character once and caches it', async () => {
+    const first = await loadCharacterData('marth');
+    const second = await loadCharacterData('marth');
+    expect(first?.name).toBe('Marth');
+    expect(second).toBe(first);
+    expect(getCharacterData('marth')).toBe(first);
+  });
+
+  it('resolves to undefined for a character without data', async () => {
+    await expect(loadCharacterData('not-imported')).resolves.toBeUndefined();
+    expect(getCharacterData('not-imported')).toBeUndefined();
   });
 });
 

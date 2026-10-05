@@ -1,11 +1,7 @@
 import { useState } from 'react';
-import {
-  findMove,
-  getCharacterData,
-  getRosterEntry,
-  MOVE_CATEGORY_LABELS,
-} from '../../data/characters';
+import { findMove, getRosterEntry, MOVE_CATEGORY_LABELS } from '../../data/characters';
 import { findClip } from '../../data/clips';
+import { useCharacterData, type CharacterDataState } from '../characters/useCharacterData';
 import { useSelectionStore } from '../../state/selectionStore';
 import { FrameDataPanel } from './FrameDataPanel';
 import { FrameStrip } from './FrameStrip';
@@ -18,20 +14,17 @@ export function MoveViewer() {
   const moveId = useSelectionStore((state) => state.moveId);
   const [currentFrame, setCurrentFrame] = useState<number | null>(null);
 
-  const character = getCharacterData(characterId);
-  const move = character ? findMove(character, moveId) : undefined;
+  const characterData = useCharacterData(characterId);
+  if (characterData.status !== 'ready') {
+    return <CharacterStatus characterId={characterId} state={characterData} />;
+  }
 
-  if (!character || !move) {
-    const name = getRosterEntry(characterId)?.name ?? characterId;
-    return (
-      <section className={classes.viewer}>
-        <h1 className={classes.title}>{name}</h1>
-        <p className={classes.empty}>
-          {name}&apos;s frame data hasn&apos;t been imported yet. Run{' '}
-          <code>npm run import:data -- --only {characterId}</code> to add it.
-        </p>
-      </section>
-    );
+  const { character } = characterData;
+  const move = findMove(character, moveId);
+  // Right after switching characters the old move id can be briefly unknown, until the
+  // store picks one of the new character's moves.
+  if (!move) {
+    return <CharacterStatus characterId={characterId} state={{ status: 'loading' }} />;
   }
 
   // Moves without a clip skip the player entirely, so the frame data moves up.
@@ -64,4 +57,52 @@ export function MoveViewer() {
       <FrameDataPanel move={move} />
     </section>
   );
+}
+
+/** Stands in for the move while its character loads, or explains why there's nothing. */
+function CharacterStatus({
+  characterId,
+  state,
+}: {
+  characterId: string;
+  state: Exclude<CharacterDataState, { status: 'ready' }>;
+}) {
+  const name = getRosterEntry(characterId)?.name ?? characterId;
+  return (
+    <section className={classes.viewer}>
+      <h1 className={classes.title}>{name}</h1>
+      <p className={classes.empty} aria-live="polite">
+        <StatusMessage name={name} characterId={characterId} status={state.status} />
+      </p>
+    </section>
+  );
+}
+
+function StatusMessage({
+  name,
+  characterId,
+  status,
+}: {
+  name: string;
+  characterId: string;
+  status: 'loading' | 'failed' | 'missing';
+}) {
+  switch (status) {
+    case 'loading':
+      return <>Loading {name}&apos;s frame data…</>;
+    case 'failed':
+      return (
+        <>
+          {name}&apos;s frame data couldn&apos;t be loaded. Check your connection and reload the
+          page.
+        </>
+      );
+    case 'missing':
+      return (
+        <>
+          {name}&apos;s frame data hasn&apos;t been imported yet. Run{' '}
+          <code>npm run import:data -- --only {characterId}</code> to add it.
+        </>
+      );
+  }
 }

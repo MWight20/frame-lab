@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { DEFAULT_CHARACTER_ID, getCharacterData } from '../data/characters';
+import { DEFAULT_CHARACTER_ID, loadCharacterData } from '../data/characters';
 import { DEFAULT_STAGE_ID } from '../data/stages';
+import type { CharacterData } from '../data/types';
 
 /**
  * App-wide selection state: which character, move and stage are showing, and which
@@ -36,29 +37,31 @@ interface SelectionState {
 const DEFAULT_MOVE_ID = 'usmash';
 
 /** The move to show after switching characters: the same move if they have it, else their first. */
-function pickMoveFor(characterId: string, preferredMoveId: string | null): string | null {
-  const character = getCharacterData(characterId);
-  if (!character) return null;
+function pickMoveFor(character: CharacterData, preferredMoveId: string | null): string | null {
   const preferred = character.moves.find((move) => move.id === preferredMoveId);
   return preferred?.id ?? character.moves[0]?.id ?? null;
 }
 
-export const useSelectionStore = create<SelectionState>()((set) => ({
+export const useSelectionStore = create<SelectionState>()((set, get) => ({
   characterId: DEFAULT_CHARACTER_ID,
-  moveId: pickMoveFor(DEFAULT_CHARACTER_ID, DEFAULT_MOVE_ID),
+  moveId: DEFAULT_MOVE_ID,
   hitIndex: 0,
   stageId: DEFAULT_STAGE_ID,
   isRosterOpen: false,
   isTrajectoryLabOpen: true,
   isMoveListOpen: false,
 
-  selectCharacter: (characterId) =>
-    set((state) => ({
-      characterId,
-      moveId: pickMoveFor(characterId, state.moveId),
-      hitIndex: 0,
-      isRosterOpen: false,
-    })),
+  selectCharacter: (characterId) => {
+    set({ characterId, hitIndex: 0, isRosterOpen: false });
+    // Character data loads on demand, so the move can only be checked once it's in. Until
+    // then the move viewer shows its loading state.
+    void loadCharacterData(characterId).then((character) => {
+      const isStillSelected = get().characterId === characterId;
+      if (character && isStillSelected) {
+        set((state) => ({ moveId: pickMoveFor(character, state.moveId) }));
+      }
+    });
+  },
   // On phones, picking a move closes the list so the move itself is on screen.
   selectMove: (moveId) => set({ moveId, hitIndex: 0, isMoveListOpen: false }),
   selectHit: (hitIndex) => set({ hitIndex }),

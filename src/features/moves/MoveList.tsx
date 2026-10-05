@@ -1,6 +1,13 @@
-import { getCharacterData, groupMovesByCategory } from '../../data/characters';
+import { groupMovesByCategory } from '../../data/characters';
 import { useSelectionStore } from '../../state/selectionStore';
+import { useCharacterData } from '../characters/useCharacterData';
 import classes from './moves.module.css';
+
+const LIST_STATUS_MESSAGES = {
+  loading: 'Loading moves…',
+  failed: "Moves couldn't be loaded.",
+  missing: 'No moves imported for this character yet.',
+};
 
 /** The selected character's moves, grouped by category. */
 export function MoveList() {
@@ -8,13 +15,16 @@ export function MoveList() {
   const selectedMoveId = useSelectionStore((state) => state.moveId);
   const selectMove = useSelectionStore((state) => state.selectMove);
 
-  const character = getCharacterData(characterId);
-  if (!character) {
+  const characterData = useCharacterData(characterId);
+  if (characterData.status !== 'ready') {
     return (
-      <p className={`${classes.list} ${classes.note}`}>No moves imported for this character yet.</p>
+      <p className={`${classes.list} ${classes.note}`} aria-live="polite">
+        {LIST_STATUS_MESSAGES[characterData.status]}
+      </p>
     );
   }
 
+  const { character } = characterData;
   return (
     <nav className={classes.list} aria-label={`${character.name} moves`}>
       {groupMovesByCategory(character.moves).map((group) => (
