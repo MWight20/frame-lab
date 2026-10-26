@@ -13,7 +13,7 @@ export function FrameDataPanel({ move }: { move: Move }) {
   const hit: Hit | undefined = move.hits[hitIndex] ?? move.hits[0];
 
   return (
-    <section aria-labelledby="frame-data-title" style={{ display: 'grid', gap: 10 }}>
+    <section className={classes.frameData} aria-labelledby="frame-data-title">
       <div className={classes.dataHeader}>
         <h2 className={classes.dataTitle} id="frame-data-title">
           Frame data
@@ -21,17 +21,17 @@ export function FrameDataPanel({ move }: { move: Move }) {
         {move.notes && <span className={classes.note}>{move.notes}</span>}
       </div>
 
-      <dl className={classes.statGrid}>
-        <StatCard label="Startup" value={move.firstActiveFrame} />
-        <StatCard label="Active" value={formatWindows(getActiveWindows(move))} />
-        <StatCard label="Total" value={move.totalFrames} />
+      <dl className={classes.statTable}>
+        <StatRow label="Startup" value={move.firstActiveFrame} />
+        <StatRow label="Active" value={formatWindows(getActiveWindows(move))} />
+        <StatRow label="Total" value={move.totalFrames} />
         {move.category === 'aerial' ? (
-          <StatCard
+          <StatRow
             label="Landing lag / L-cancel"
             value={formatPair(move.landingLag, move.lCancelledLandingLag)}
           />
         ) : (
-          <StatCard label="Interruptible from" value={move.iasa} />
+          <StatRow label="Interruptible from" value={move.iasa} />
         )}
       </dl>
 
@@ -86,18 +86,18 @@ function HitStats({ hit }: { hit: Hit }) {
 
   return (
     <>
-      <dl className={`${classes.statGrid} ${classes.hitGrid}`}>
-        <StatCard label="Damage" value={`${hitbox.damage}%`} />
-        <StatCard
+      <dl className={classes.statTable}>
+        <StatRow label="Damage" value={`${hitbox.damage}%`} />
+        <StatRow
           label={hitbox.angle === 361 ? 'Angle (Sakurai)' : 'Angle'}
           value={hitbox.angle === 361 ? '361' : `${hitbox.angle}°`}
         />
-        <StatCard
+        <StatRow
           label={hasSetKnockback ? 'Set knockback' : 'Base knockback'}
           value={hasSetKnockback ? hitbox.setKnockback : hitbox.baseKnockback}
         />
-        <StatCard label="Knockback growth" value={hitbox.knockbackGrowth} />
-        <StatCard label="Shield stun" value={hitbox.shieldstun} />
+        <StatRow label="Knockback growth" value={hitbox.knockbackGrowth} />
+        <StatRow label="Shield stun" value={hitbox.shieldstun} />
       </dl>
       {(hit.hitboxes.length > 1 || hitbox.effect !== 'Normal') && (
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -113,9 +113,10 @@ function HitStats({ hit }: { hit: Hit }) {
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string | number | null }) {
+/** One label and value. Rows stack into a compact table, so the panel fits beside the clip. */
+function StatRow({ label, value }: { label: string; value: string | number | null }) {
   return (
-    <div className={classes.statCard}>
+    <div className={classes.statRow}>
       <dt className={classes.statLabel}>{label}</dt>
       <dd className={classes.statValue}>{keepRangesTogether(value ?? '—')}</dd>
     </div>

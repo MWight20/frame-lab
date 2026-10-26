@@ -1,4 +1,4 @@
-import { SegmentedControl } from '@mantine/core';
+import { Drawer, SegmentedControl } from '@mantine/core';
 import { useId, useMemo } from 'react';
 import { findMove } from '../../data/characters';
 import { getStage, STAGES } from '../../data/stages';
@@ -18,7 +18,7 @@ import {
   SURFACE_SNAP_DISTANCE,
 } from './labScenario';
 import { LaunchOverlay } from './LaunchOverlay';
-import { ResultCard } from './ResultCard';
+import { ResultTable } from './ResultTable';
 import { StageView } from './StageView';
 import { VictimPin } from './VictimPin';
 import classes from './trajectory.module.css';
@@ -29,37 +29,59 @@ const STAGE_OPTIONS = STAGES.map((stage) => ({
   label: <span title={stage.name}>{stage.shortName}</span>,
 }));
 
+export const TRAJECTORY_LAB_ID = 'trajectory-lab';
+
+interface TrajectoryLabTrayProps {
+  /** Any CSS width. The app passes "everything but the move list", or 100% on phones. */
+  width: string;
+}
+
 /**
- * The knockback and DI lab: pick a victim, percent, spot and DI, and see where the
- * selected hit sends them, with and without that DI.
+ * The knockback and DI lab, in a tray that slides over the page from the right: pick a
+ * victim, percent, spot and DI, and see where the selected hit sends them, with and
+ * without that DI. It closes with its × button, Escape, or a click outside.
  */
-export function TrajectoryLabPanel() {
+export function TrajectoryLabTray({ width }: TrajectoryLabTrayProps) {
+  const isOpen = useSelectionStore((state) => state.isTrajectoryLabOpen);
+  const setOpen = useSelectionStore((state) => state.setTrajectoryLabOpen);
   const stageId = useSelectionStore((state) => state.stageId);
-  const selectStage = useSelectionStore((state) => state.selectStage);
   const stage = getStage(stageId);
 
   return (
-    <section className={classes.panel} aria-labelledby="trajectory-lab-title">
-      <div className={classes.header}>
-        <div className={classes.titleGroup}>
-          <h2 className={classes.title} id="trajectory-lab-title">
-            Trajectory Lab
-          </h2>
-          {/* The stage picker only shows initials, so name the current stage in full. */}
-          <span className={classes.stageName} aria-live="polite">
-            {stage.name}
-          </span>
-        </div>
-        <SegmentedControl
-          aria-label="Stage"
-          size="xs"
-          data={STAGE_OPTIONS}
-          value={stage.id}
-          onChange={selectStage}
-        />
-      </div>
+    <Drawer
+      id={TRAJECTORY_LAB_ID}
+      opened={isOpen}
+      onClose={() => setOpen(false)}
+      position="right"
+      size={width}
+      title={<LabTitle stageName={stage.name} />}
+      classNames={{ header: classes.trayHeader, body: classes.trayBody }}
+    >
       <LabBody stage={stage} />
-    </section>
+    </Drawer>
+  );
+}
+
+function LabTitle({ stageName }: { stageName: string }) {
+  return (
+    <span className={classes.titleGroup}>
+      <span className={classes.title}>Trajectory Lab</span>
+      {/* The stage picker only shows initials, so name the current stage in full. */}
+      <span className={classes.stageName}>{stageName}</span>
+    </span>
+  );
+}
+
+function StagePicker({ stage }: { stage: Stage }) {
+  const selectStage = useSelectionStore((state) => state.selectStage);
+  return (
+    <SegmentedControl
+      aria-label="Stage"
+      size="xs"
+      data={STAGE_OPTIONS}
+      value={stage.id}
+      onChange={selectStage}
+    />
   );
 }
 
@@ -158,49 +180,52 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
   }
 
   return (
-    <>
-      <div className={classes.stageFrame}>
-        <StageView
-          stage={stage}
-          onPointPicked={(point) => moveVictimTo(point, SURFACE_SNAP_DISTANCE)}
-        >
-          <LaunchOverlay noDi={results.noDi.hit} withDi={results.withDi.hit} />
-          <VictimPin
-            position={placement.position}
-            onMove={(point) => moveVictimTo(point, 0)}
-            describedBy={positionId}
+    <div className={classes.labLayout}>
+      <div className={classes.stageColumn}>
+        <StagePicker stage={stage} />
+        <div className={classes.stageFrame}>
+          <StageView
+            stage={stage}
+            onPointPicked={(point) => moveVictimTo(point, SURFACE_SNAP_DISTANCE)}
+          >
+            <LaunchOverlay noDi={results.noDi.hit} withDi={results.withDi.hit} />
+            <VictimPin
+              position={placement.position}
+              onMove={(point) => moveVictimTo(point, 0)}
+              describedBy={positionId}
+            />
+          </StageView>
+        </div>
+        <p className={classes.hint}>Drag on the stage to place the victim; it snaps onto floors.</p>
+        <ResultTable noDi={results.noDi} withDi={results.withDi} />
+      </div>
+
+      <div className={classes.sideColumn}>
+        {/* Inputs first, then the joystick under them (or beside them in a narrow tray). */}
+        <div className={classes.controlsRow}>
+          <LabControls
+            hit={hit}
+            strongestHitbox={strongestHitbox}
+            placement={placement}
+            positionId={positionId}
           />
-        </StageView>
+          <Joystick value={stick} onChange={setStick} />
+        </div>
       </div>
-      <p className={classes.hint}>
-        Drag on the stage to place the victim. Near a floor or platform, they snap onto it.
-      </p>
-
-      <div className={classes.controlsRow}>
-        <Joystick value={stick} onChange={setStick} />
-        <LabControls
-          hit={hit}
-          strongestHitbox={strongestHitbox}
-          placement={placement}
-          positionId={positionId}
-        />
-      </div>
-
-      <div className={classes.results}>
-        <ResultCard title="No DI" result={results.noDi} />
-        <ResultCard title="With this DI" result={results.withDi} />
-      </div>
-    </>
+    </div>
   );
 }
 
 function EmptyStage({ stage, message }: { stage: Stage; message: string }) {
   return (
-    <>
-      <div className={classes.stageFrame}>
-        <StageView stage={stage} />
+    <div className={classes.labLayout}>
+      <div className={classes.stageColumn}>
+        <StagePicker stage={stage} />
+        <div className={classes.stageFrame}>
+          <StageView stage={stage} />
+        </div>
       </div>
       <p className={classes.upcoming}>{message}</p>
-    </>
+    </div>
   );
 }

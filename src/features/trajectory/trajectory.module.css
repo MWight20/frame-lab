@@ -1,19 +1,44 @@
-.panel {
-  min-width: 0;
-  padding: 18px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  border: 1px solid var(--fl-border);
-  border-radius: 14px;
-  background: var(--fl-surface);
+/* The tray (a Mantine Drawer). Its body stacks the lab's parts with even spacing. */
+/* Mantine gives the drawer header a 60px minimum; the lab needs the room for its content. */
+.trayHeader {
+  min-height: 0;
+  padding-block: 10px;
+  border-bottom: 1px solid var(--fl-border);
 }
 
-.header {
+/* The body is a size container, so the layout below follows the tray's width, not the
+   window's. */
+.trayBody {
+  padding-top: 12px;
+  container-type: inline-size;
+}
+
+/* Stacked when the tray is narrow (phones, small windows): stage on top, then the rest. */
+.labLayout {
   display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stageColumn,
+.sideColumn {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Hidden on screen but still read by screen readers. */
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* The title and the current stage's name, kept together on the left of the header. */
@@ -47,10 +72,13 @@
   background: var(--fl-stage-bg);
 }
 
+/* The stage is the lab's main control, so it grows with the tray. The height cap keeps it,
+   the stage picker and the hint inside the window. */
 .stage {
   display: block;
   width: 100%;
   height: auto;
+  max-height: calc(100dvh - 150px);
 }
 
 .blastZone {
@@ -98,7 +126,7 @@
 }
 
 .hint {
-  margin: -6px 0 0;
+  margin: -4px 0 0;
   color: var(--fl-muted);
   font-size: 12px;
 }
@@ -181,32 +209,27 @@
 
 .controlsRow {
   display: grid;
-  grid-template-columns: minmax(150px, 200px) minmax(0, 1fr);
-  gap: 20px;
+  grid-template-columns: minmax(0, 1fr) 150px;
+  gap: 16px;
   align-items: start;
 }
 
 .labControls {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 12px;
+  align-items: end;
 }
 
-.fieldRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 16px 24px;
-}
-
-.staleInput {
-  flex: 1 1 180px;
+/* Inputs that need the grid's full width: the hitbox picker and the position line. */
+.fullWidth {
+  grid-column: 1 / -1;
 }
 
 .fieldLabel {
   display: block;
   margin-bottom: 4px;
-  font-size: var(--mantine-font-size-sm);
+  font-size: var(--mantine-font-size-xs);
   font-weight: 500;
 }
 
@@ -220,71 +243,90 @@
 .positionText {
   margin: 0;
   font-family: var(--fl-font-mono);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .results {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.resultCard {
-  padding: 12px 14px;
-  border: 1px solid var(--fl-border);
-  border-radius: 10px;
-  background: var(--fl-surface-raised);
-}
-
-.resultCard[data-ko] {
-  border-color: var(--fl-danger);
-  background: var(--fl-danger-bg);
-}
-
-.resultTitle {
-  margin: 0 0 4px;
-  font-family: var(--fl-font-display);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.outcome {
-  margin: 0 0 8px;
-  font-weight: 600;
-}
-
-.resultCard[data-ko] .outcome {
-  color: var(--fl-danger);
-}
-
-.resultList {
-  margin: 0;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 2px 12px;
+.resultTable {
+  width: 100%;
+  border-collapse: collapse;
   font-size: 13px;
 }
 
-.resultList dt {
-  color: var(--fl-muted);
+.resultTable th,
+.resultTable td {
+  padding: 4px 8px;
+  border-bottom: 1px solid var(--fl-border);
+  text-align: left;
+  vertical-align: top;
 }
 
-.resultList dd {
-  margin: 0;
+.resultTable thead th {
+  font-family: var(--fl-font-display);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.resultTable tbody th {
+  width: 26%;
+  color: var(--fl-muted);
+  font-weight: 400;
+}
+
+.resultTable td {
+  width: 37%;
   font-family: var(--fl-font-mono);
-  text-align: right;
+}
+
+/* A column that ends in a KO is tinted, with its outcome in the danger color. */
+.resultTable td[data-ko] {
+  background: var(--fl-danger-bg);
+}
+
+.resultTable tbody tr:first-child td {
+  font-family: inherit;
+  font-weight: 600;
+}
+
+.resultTable tbody tr:first-child td[data-ko] {
+  color: var(--fl-danger);
 }
 
 .resultNote {
-  margin: 8px 0 0;
+  margin: 0;
   color: var(--fl-muted);
   font-size: 12px;
   line-height: 1.4;
 }
 
 @media (max-width: 36em) {
-  .controlsRow,
-  .results {
+  .controlsRow {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Side by side once the tray is wide enough: the stage and results take the big left
+   column, and the inputs sit above the joystick in a narrow right column. Placed last so
+   it overrides the base .controlsRow and .stage rules above. */
+@container (min-width: 900px) {
+  .labLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .controlsRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Leave room under the stage for the results table. */
+  .stage {
+    max-height: calc(100dvh - 400px);
   }
 }

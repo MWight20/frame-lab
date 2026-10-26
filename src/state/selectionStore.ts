@@ -48,7 +48,8 @@ export const useSelectionStore = create<SelectionState>()((set, get) => ({
   hitIndex: 0,
   stageId: DEFAULT_STAGE_ID,
   isRosterOpen: false,
-  isTrajectoryLabOpen: true,
+  // The lab is a tray over the page, so it starts closed to keep the move in view.
+  isTrajectoryLabOpen: false,
   isMoveListOpen: false,
 
   selectCharacter: (characterId) => {

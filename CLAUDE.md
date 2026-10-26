@@ -102,15 +102,17 @@ src/features/
   characters/                  CharacterPanel, CharacterIcon (falls back to a letter), RosterDrawer,
                                useCharacterData (loads a character for a component)
   moves/                       MoveList, MoveViewer, MoveClip, FrameStrip, FrameDataPanel, frameTimeline.ts
-  trajectory/                  TrajectoryLabPanel, StageView (SVG in game units, y negated),
+  trajectory/                  TrajectoryLabPanel (TrajectoryLabTray, a right-side Drawer), StageView
+                               (SVG in game units, y negated),
                                Joystick + joystickGeometry.ts (pointer/keyboard → stick value),
                                labScenario.ts (pure: hitbox choice, pin snapping, runs the engine),
-                               LaunchOverlay, VictimPin, LabControls, ResultCard
+                               LaunchOverlay, VictimPin, LabControls, ResultTable (No DI vs With DI)
 src/state/selectionStore.ts    characterId, moveId, hitIndex, stageId, isRosterOpen, isTrajectoryLabOpen,
                                isMoveListOpen (phones only)
 src/state/trajectoryStore.ts   victimId, victimPercent, isCrouching, stick, hitboxName, victimPosition,
                                isAttackerFacingLeft, staleUses, techOnLanding (lab-only settings)
-src/app/                       App (Mantine AppShell: 64px header, 250px navbar), AppProviders,
+src/app/                       App (Mantine AppShell: 64px header, 250px navbar, one centered work column),
+                               AppProviders,
                                useIsPhone (below the `sm` breakpoint)
 ```
 
@@ -120,7 +122,9 @@ Behavior worth knowing before you change things:
 - **Bundle.** `vite.config.ts` splits React and Mantine into their own chunks (`codeSplitting` groups), so the app's own code is about 70 kB and no chunk passes Vite's 500 kB warning.
 - **Adding characters.** Any JSON file added to `src/data/characters/` is picked up automatically. A roster character without data appears dimmed, with an empty state that shows the import command. Every character has data today, so the empty state is only tested with a made-up id.
 - **Roster drawer position.** It is fixed-position next to the navbar, using AppShell's `--app-shell-header-height` and `--app-shell-navbar-width` variables. If you change the shell dimensions, the drawer follows. On phones it spans the full width, over the move list panel.
-- **Phone layout.** Below Mantine's `sm` breakpoint (48em, 768px; `useIsPhone` and the AppShell navbar breakpoint must agree) the navbar collapses into a full-width panel behind a menu button in the header. Picking a move closes it. The header keeps only the menu button, a 40px logo and the lab switch (its label visually hidden); the theme picker and About move to `PhoneSettings` at the bottom of the panel. Stat grids drop to 2 and 3 columns. CSS uses `$mantine-breakpoint-sm` from `postcss.config.cjs`.
+- **Phone layout.** Below Mantine's `sm` breakpoint (48em, 768px; `useIsPhone` and the AppShell navbar breakpoint must agree) the navbar collapses into a full-width panel behind a menu button in the header. Picking a move closes it. The header keeps only the menu button, a 40px logo and the lab button (shortened to "Lab"); the theme picker and About move to `PhoneSettings` at the bottom of the panel. The lab tray is full width. CSS uses `$mantine-breakpoint-sm` from `postcss.config.cjs`.
+- **Move viewer layout.** The clip sits on the left and the frame data (two compact label/value tables) on the right from Mantine's `md` breakpoint (62em) up; below that, and for moves without a clip, they stack. The frame strip runs full width underneath. At 1440×900 and 1024×768 the whole viewer fits without scrolling.
+- **Trajectory Lab tray.** The lab is a Mantine Drawer that slides over the page from the right, covering everything but the move list (`calc(100% - 250px)`; full width on phones), opened by the header's "Trajectory Lab" button. It starts closed, dims the move list, and closes on ×, Escape or a click outside. The tray body is a CSS size container: from 900px of tray width the stage and results table take a large left column, and a 360px right column holds the inputs with the joystick under them; narrower trays stack, with the joystick beside the inputs. The stage grows with the tray, capped by the window height (`100dvh - 400px` side by side), so the lab fits without scrolling at 1280×800 and up. Its focus trap moves focus inside just after opening, so tests wait for that (`waitForTrayFocus`) before focusing a control.
 - **Clip files.** Clips are `public/clips/<characterId>/<moveId>.mp4`. The page only knows about files that existed when the dev server started or the app was built (the clip manifest); in dev, adding or removing a clip reloads the page. Moves without a clip show a "No clip" tag and no player. The player counts frames as `floor(currentTime * 60) + 1` and assumes a clip's first frame is the move's frame 1. It defaults to ¼ speed.
 - **Icon files.** Icons are `public/icons/characters/<characterId>.png`, 24 × 24 pixel art, shown at exactly 24px and 48px with `image-rendering: pixelated`.
 - **Joystick.** "Hold position" is on by default, so a DI choice stays put. The deadzone is drawn as a dashed square because the game zeroes each axis separately. Shift + arrow moves one controller step (1/80).
@@ -175,7 +179,7 @@ SmashWiki. Kill percents in `killPercent.test.ts` match ikneedata exactly.
 
 ## Design reference
 
-The approved layout is board D ("Merged workstation") on the design canvas. The three themes are:
+The original approved layout was board D ("Merged workstation") on the design canvas. It has since been reworked to cut scrolling: the Trajectory Lab moved from a second column into a right-side tray, and the move viewer puts the clip and frame data side by side. The three themes are:
 
 - **Menu Paper** (default, light)
 - **Final Destination** (navy and amber)

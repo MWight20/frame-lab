@@ -1,4 +1,4 @@
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useSelectionStore } from '../state/selectionStore';
@@ -65,8 +65,9 @@ describe('App', () => {
 
   it('names the selected stage in full next to the Trajectory Lab title', async () => {
     const user = userEvent.setup();
+    useSelectionStore.setState({ isTrajectoryLabOpen: true });
     renderWithProviders(<App />);
-    const lab = screen.getByRole('region', { name: 'Trajectory Lab' });
+    const lab = screen.getByRole('dialog', { name: /Trajectory Lab/ });
     expect(within(lab).getByText('Final Destination', { selector: 'span' })).toBeInTheDocument();
 
     await user.click(within(lab).getByRole('radio', { name: 'BF' }));
@@ -110,36 +111,68 @@ describe('App', () => {
     expect(screen.getByText(/npm run import:data -- --only not-imported/)).toBeInTheDocument();
   });
 
-  it('hides and shows the Trajectory Lab', async () => {
+  it('opens the Trajectory Lab tray from the header and closes it again', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
-    expect(screen.getByRole('region', { name: 'Trajectory Lab' })).toBeInTheDocument();
-    await user.click(screen.getByRole('switch', { name: 'Trajectory Lab' }));
-    expect(screen.queryByRole('region', { name: 'Trajectory Lab' })).not.toBeInTheDocument();
+    // The tray starts closed so the move stays in view.
+    expect(screen.queryByRole('dialog', { name: /Trajectory Lab/ })).not.toBeInTheDocument();
+
+    const labButton = screen.getByRole('button', { name: 'Trajectory Lab' });
+    await user.click(labButton);
+    expect(screen.getByRole('dialog', { name: /Trajectory Lab/ })).toBeInTheDocument();
+    expect(labButton).toHaveAttribute('aria-expanded', 'true');
+
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog', { name: /Trajectory Lab/ })).not.toBeInTheDocument();
   });
 });
 
 describe('Trajectory Lab', () => {
-  function card(name: string) {
-    return within(screen.getByRole('region', { name }));
+  beforeEach(() => {
+    useSelectionStore.setState({ isTrajectoryLabOpen: true });
+  });
+
+  /**
+   * The tray's focus trap moves focus inside it just after it opens. Wait for that before
+   * focusing a control, or the trap takes focus back from it.
+   */
+  async function waitForTrayFocus() {
+    const tray = screen.getByRole('dialog', { name: /Trajectory Lab/ });
+    await waitFor(() => expect(tray).toContainElement(document.activeElement as HTMLElement));
+  }
+
+  /** The text of each row in one column of the results table ("No DI" or "With this DI"). */
+  function resultColumn(name: string): string[] {
+    const table = screen.getByRole('table', { name: 'Results' });
+    const headers = within(table)
+      .getAllByRole('columnheader')
+      .map((header) => header.textContent);
+    // The first header sits over the row labels, which are row headers rather than cells.
+    const cellIndex = headers.indexOf(name) - 1;
+    return within(table)
+      .getAllByRole('row')
+      .slice(1)
+      .map((row) => within(row).getAllByRole('cell')[cellIndex]?.textContent ?? '');
   }
 
   it('shows where the hit sends the victim, with and without DI', () => {
     renderWithProviders(<App />);
     // Fox up smash on Marth at 80%, center of Final Destination.
-    expect(card('No DI').getByText(/KO through the top blast zone/)).toBeInTheDocument();
-    expect(card('No DI').getByText('79%')).toBeInTheDocument();
-    expect(card('With this DI').getByText('80.0°')).toBeInTheDocument();
+    expect(resultColumn('No DI')).toContainEqual(expect.stringMatching(/KO through the top/));
+    expect(resultColumn('No DI')).toContain('79%');
+    expect(resultColumn('With this DI')).toContain('80.0°');
   });
 
   it('updates the result when the percent changes', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
-    const percent = screen.getByLabelText('Victim percent (before the hit)');
+    const percent = screen.getByLabelText('Percent before hit');
     await user.clear(percent);
     await user.type(percent, '10');
     // At 10% the up smash doesn't KO; Marth comes back down on Final Destination.
-    expect(card('No DI').getByText(/^Lands on the main stage, frame \d+/)).toBeInTheDocument();
+    expect(resultColumn('No DI')).toContainEqual(
+      expect.stringMatching(/^Lands on the main stage, frame \d+/),
+    );
   });
 
   it('shows the staled damage and the tech in the results', async () => {
@@ -147,24 +180,25 @@ describe('Trajectory Lab', () => {
     // Low enough that the up smash brings Marth back down on the stage instead of KOing.
     useTrajectoryStore.setState({ victimPercent: 10 });
     renderWithProviders(<App />);
-    const stale = screen.getByLabelText('Stale uses');
+    const stale = screen.getByLabelText(/^Stale uses/);
     await user.clear(stale);
     await user.type(stale, '3');
     // Fox up smash deals 18%; used 3 times in a row it deals 18 × 0.76.
-    expect(card('No DI').getByText('13.68%')).toBeInTheDocument();
-    expect(card('No DI').getByText(/\(missed tech\)$/)).toBeInTheDocument();
+    expect(resultColumn('No DI')).toContain('13.68%');
+    expect(resultColumn('No DI')).toContainEqual(expect.stringMatching(/\(missed tech\)$/));
 
     await user.click(screen.getByRole('checkbox', { name: /Tech on landing/ }));
-    expect(card('No DI').getByText(/\(techs\)$/)).toBeInTheDocument();
+    expect(resultColumn('No DI')).toContainEqual(expect.stringMatching(/\(techs\)$/));
   });
 
   it('changes the DI result when the stick moves', async () => {
     const user = userEvent.setup();
     renderWithProviders(<App />);
+    await waitForTrayFocus();
     screen.getByRole('application', { name: 'DI stick' }).focus();
     await user.keyboard('{ArrowRight>10/}');
-    expect(card('No DI').getByText('80.0°')).toBeInTheDocument();
-    expect(card('With this DI').queryByText('80.0°')).not.toBeInTheDocument();
+    expect(resultColumn('No DI')).toContain('80.0°');
+    expect(resultColumn('With this DI')).not.toContain('80.0°');
   });
 
   it('moves the victim with the arrow keys and resets to center stage', async () => {
@@ -172,6 +206,7 @@ describe('Trajectory Lab', () => {
     renderWithProviders(<App />);
     expect(screen.getByText(/grounded on the main stage/)).toBeInTheDocument();
 
+    await waitForTrayFocus();
     screen.getByRole('application', { name: 'Victim position' }).focus();
     await user.keyboard('{Shift>}{ArrowUp}{/Shift}');
     expect(screen.getByText('Victim at x 0.0, y 10.0, airborne')).toBeInTheDocument();
@@ -186,7 +221,7 @@ describe('Trajectory Lab', () => {
     renderWithProviders(<App />);
     await user.click(screen.getByRole('button', { name: 'Grab' }));
     expect(screen.getByText(/Grab doesn't launch anyone/)).toBeInTheDocument();
-    expect(screen.queryByRole('region', { name: 'No DI' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('table', { name: 'Results' })).not.toBeInTheDocument();
   });
 });
 
@@ -220,8 +255,8 @@ describe('phone layout', () => {
     const settings = screen.getByRole('region', { name: 'Settings' });
     expect(within(settings).getByText('Theme', { selector: 'label' })).toBeInTheDocument();
     expect(within(settings).getByRole('button', { name: 'About' })).toBeInTheDocument();
-    // The lab switch keeps its name even though its label is hidden on screen.
-    expect(within(header).getByRole('switch', { name: 'Trajectory Lab' })).toBeInTheDocument();
+    // The lab button shortens to "Lab" on screen but keeps its full name.
+    expect(within(header).getByRole('button', { name: 'Trajectory Lab' })).toHaveTextContent('Lab');
   });
 
   it('opens the move list from the menu button and closes it after picking a move', async () => {
