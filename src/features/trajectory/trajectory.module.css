@@ -6,8 +6,23 @@
   border-bottom: 1px solid var(--fl-border);
 }
 
+/* The body is a size container, so the layout below follows the tray's width, not the
+   window's. */
 .trayBody {
-  padding-top: 10px;
+  padding-top: 12px;
+  container-type: inline-size;
+}
+
+/* Stacked when the tray is narrow (phones, small windows): stage on top, then the rest. */
+.labLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stageColumn,
+.sideColumn {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -57,11 +72,13 @@
   background: var(--fl-stage-bg);
 }
 
+/* The stage is the lab's main control, so it grows with the tray. The height cap keeps it,
+   the stage picker and the hint inside the window. */
 .stage {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 190px;
+  max-height: calc(100dvh - 150px);
 }
 
 .blastZone {
@@ -290,5 +307,26 @@
 @media (max-width: 36em) {
   .controlsRow {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Side by side once the tray is wide enough: the stage and results take the big left
+   column, and the joystick sits above the inputs in a narrow right column. Placed last so
+   it overrides the base .controlsRow and .stage rules above. */
+@container (min-width: 900px) {
+  .labLayout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    align-items: start;
+  }
+
+  .controlsRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Leave room under the stage for the results table. */
+  .stage {
+    max-height: calc(100dvh - 400px);
   }
 }

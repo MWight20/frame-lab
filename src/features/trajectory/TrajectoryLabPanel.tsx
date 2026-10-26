@@ -31,12 +31,9 @@ const STAGE_OPTIONS = STAGES.map((stage) => ({
 
 export const TRAJECTORY_LAB_ID = 'trajectory-lab';
 
-/** The tray's width on wider screens; on phones it fills the screen. */
-const TRAY_WIDTH = 540;
-
 interface TrajectoryLabTrayProps {
-  /** Phones get a full-width tray. */
-  isPhone: boolean;
+  /** Any CSS width. The app passes "everything but the move list", or 100% on phones. */
+  width: string;
 }
 
 /**
@@ -44,7 +41,7 @@ interface TrajectoryLabTrayProps {
  * victim, percent, spot and DI, and see where the selected hit sends them, with and
  * without that DI. It closes with its × button, Escape, or a click outside.
  */
-export function TrajectoryLabTray({ isPhone }: TrajectoryLabTrayProps) {
+export function TrajectoryLabTray({ width }: TrajectoryLabTrayProps) {
   const isOpen = useSelectionStore((state) => state.isTrajectoryLabOpen);
   const setOpen = useSelectionStore((state) => state.setTrajectoryLabOpen);
   const stageId = useSelectionStore((state) => state.stageId);
@@ -56,7 +53,7 @@ export function TrajectoryLabTray({ isPhone }: TrajectoryLabTrayProps) {
       opened={isOpen}
       onClose={() => setOpen(false)}
       position="right"
-      size={isPhone ? '100%' : TRAY_WIDTH}
+      size={width}
       title={<LabTitle stageName={stage.name} />}
       classNames={{ header: classes.trayHeader, body: classes.trayBody }}
     >
@@ -183,46 +180,51 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
   }
 
   return (
-    <>
-      <StagePicker stage={stage} />
-      <div className={classes.stageFrame}>
-        <StageView
-          stage={stage}
-          onPointPicked={(point) => moveVictimTo(point, SURFACE_SNAP_DISTANCE)}
-        >
-          <LaunchOverlay noDi={results.noDi.hit} withDi={results.withDi.hit} />
-          <VictimPin
-            position={placement.position}
-            onMove={(point) => moveVictimTo(point, 0)}
-            describedBy={positionId}
+    <div className={classes.labLayout}>
+      <div className={classes.stageColumn}>
+        <StagePicker stage={stage} />
+        <div className={classes.stageFrame}>
+          <StageView
+            stage={stage}
+            onPointPicked={(point) => moveVictimTo(point, SURFACE_SNAP_DISTANCE)}
+          >
+            <LaunchOverlay noDi={results.noDi.hit} withDi={results.withDi.hit} />
+            <VictimPin
+              position={placement.position}
+              onMove={(point) => moveVictimTo(point, 0)}
+              describedBy={positionId}
+            />
+          </StageView>
+        </div>
+        <p className={classes.hint}>Drag on the stage to place the victim; it snaps onto floors.</p>
+        <ResultTable noDi={results.noDi} withDi={results.withDi} />
+      </div>
+
+      <div className={classes.sideColumn}>
+        <div className={classes.controlsRow}>
+          <Joystick value={stick} onChange={setStick} />
+          <LabControls
+            hit={hit}
+            strongestHitbox={strongestHitbox}
+            placement={placement}
+            positionId={positionId}
           />
-        </StageView>
+        </div>
       </div>
-      <p className={classes.hint}>Drag on the stage to place the victim; it snaps onto floors.</p>
-
-      <ResultTable noDi={results.noDi} withDi={results.withDi} />
-
-      <div className={classes.controlsRow}>
-        <Joystick value={stick} onChange={setStick} />
-        <LabControls
-          hit={hit}
-          strongestHitbox={strongestHitbox}
-          placement={placement}
-          positionId={positionId}
-        />
-      </div>
-    </>
+    </div>
   );
 }
 
 function EmptyStage({ stage, message }: { stage: Stage; message: string }) {
   return (
-    <>
-      <StagePicker stage={stage} />
-      <div className={classes.stageFrame}>
-        <StageView stage={stage} />
+    <div className={classes.labLayout}>
+      <div className={classes.stageColumn}>
+        <StagePicker stage={stage} />
+        <div className={classes.stageFrame}>
+          <StageView stage={stage} />
+        </div>
       </div>
       <p className={classes.upcoming}>{message}</p>
-    </>
+    </div>
   );
 }

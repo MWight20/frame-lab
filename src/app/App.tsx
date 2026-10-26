@@ -10,6 +10,8 @@ import { useSelectionStore } from '../state/selectionStore';
 import classes from './App.module.css';
 import { useIsPhone } from './useIsPhone';
 
+const NAVBAR_WIDTH = 250;
+
 export function App() {
   const isMoveListOpen = useSelectionStore((state) => state.isMoveListOpen);
   const isPhone = useIsPhone();
@@ -18,7 +20,7 @@ export function App() {
     <AppShell
       header={{ height: 64 }}
       // Below `sm` the navbar becomes a full-width panel behind the header's menu button.
-      navbar={{ width: 250, breakpoint: 'sm', collapsed: { mobile: !isMoveListOpen } }}
+      navbar={{ width: NAVBAR_WIDTH, breakpoint: 'sm', collapsed: { mobile: !isMoveListOpen } }}
       padding={0}
     >
       <AppShell.Header withBorder={false}>
@@ -38,7 +40,8 @@ export function App() {
       </AppShell.Main>
 
       <RosterDrawer />
-      <TrajectoryLabTray isPhone={isPhone} />
+      {/* The tray covers everything but the move list; on phones, the whole screen. */}
+      <TrajectoryLabTray width={isPhone ? '100%' : `calc(100% - ${NAVBAR_WIDTH}px)`} />
     </AppShell>
   );
 }
