@@ -1,0 +1,13 @@
+// Cloudflare Workers config for hosting Frame Lab as a static site.
+// Cloudflare runs `npm run build`, then serves the files in dist/ as-is (no Worker code).
+{
+  // Must match the Worker's name in the Cloudflare dashboard (frame-lab.<account>.workers.dev).
+  "name": "frame-lab",
+  "compatibility_date": "2026-10-26",
+  "assets": {
+    "directory": "./dist",
+  },
+  // Required for preview deploys of non-production branches (`npx wrangler preview`).
+  // Empty is fine: assets and compatibility settings above apply to previews too.
+  "previews": {},
+}
