@@ -201,14 +201,15 @@ function LabWorkspace({ stage, move, hit, victim }: LabWorkspaceProps) {
       </div>
 
       <div className={classes.sideColumn}>
+        {/* Inputs first, then the joystick under them (or beside them in a narrow tray). */}
         <div className={classes.controlsRow}>
-          <Joystick value={stick} onChange={setStick} />
           <LabControls
             hit={hit}
             strongestHitbox={strongestHitbox}
             placement={placement}
             positionId={positionId}
           />
+          <Joystick value={stick} onChange={setStick} />
         </div>
       </div>
     </div>

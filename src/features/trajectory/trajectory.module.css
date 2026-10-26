@@ -209,7 +209,7 @@
 
 .controlsRow {
   display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 150px;
   gap: 16px;
   align-items: start;
 }
@@ -311,7 +311,7 @@
 }
 
 /* Side by side once the tray is wide enough: the stage and results take the big left
-   column, and the joystick sits above the inputs in a narrow right column. Placed last so
+   column, and the inputs sit above the joystick in a narrow right column. Placed last so
    it overrides the base .controlsRow and .stage rules above. */
 @container (min-width: 900px) {
   .labLayout {
