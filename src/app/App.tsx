@@ -5,13 +5,12 @@ import { AppHeader, MOVE_LIST_ID } from '../features/header/AppHeader';
 import { PhoneSettings } from '../features/header/PhoneSettings';
 import { MoveList } from '../features/moves/MoveList';
 import { MoveViewer } from '../features/moves/MoveViewer';
-import { TrajectoryLabPanel } from '../features/trajectory/TrajectoryLabPanel';
+import { TrajectoryLabTray } from '../features/trajectory/TrajectoryLabPanel';
 import { useSelectionStore } from '../state/selectionStore';
 import classes from './App.module.css';
 import { useIsPhone } from './useIsPhone';
 
 export function App() {
-  const isLabOpen = useSelectionStore((state) => state.isTrajectoryLabOpen);
   const isMoveListOpen = useSelectionStore((state) => state.isMoveListOpen);
   const isPhone = useIsPhone();
 
@@ -33,13 +32,13 @@ export function App() {
       </AppShell.Navbar>
 
       <AppShell.Main className={classes.main}>
-        <div className={classes.workArea} data-lab-open={isLabOpen}>
+        <div className={classes.workArea}>
           <MoveViewer />
-          {isLabOpen && <TrajectoryLabPanel />}
         </div>
       </AppShell.Main>
 
       <RosterDrawer />
+      <TrajectoryLabTray isPhone={isPhone} />
     </AppShell>
   );
 }

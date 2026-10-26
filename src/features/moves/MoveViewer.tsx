@@ -43,18 +43,23 @@ export function MoveViewer() {
         {clip?.variant && <span className={classes.clipTag}>Clip: {clip.variant}</span>}
       </div>
 
-      {clip && (
-        <MoveClip
-          key={`${characterId}/${move.id}`}
-          characterId={characterId}
-          clipFileId={clip.fileId}
-          moveName={move.name}
-          totalFrames={move.totalFrames}
-          onFrameChange={setCurrentFrame}
-        />
-      )}
+      {/* Clip on the left and frame data on the right on wide screens; stacked otherwise. */}
+      <div className={classes.viewerBody} data-has-clip={clip ? true : undefined}>
+        {clip && (
+          <div className={classes.clipColumn}>
+            <MoveClip
+              key={`${characterId}/${move.id}`}
+              characterId={characterId}
+              clipFileId={clip.fileId}
+              moveName={move.name}
+              totalFrames={move.totalFrames}
+              onFrameChange={setCurrentFrame}
+            />
+          </div>
+        )}
+        <FrameDataPanel move={move} />
+      </div>
       <FrameStrip move={move} currentFrame={clip ? currentFrame : null} />
-      <FrameDataPanel move={move} />
     </section>
   );
 }

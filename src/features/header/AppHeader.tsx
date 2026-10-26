@@ -1,5 +1,6 @@
-import { Burger, Switch } from '@mantine/core';
+import { Burger, Button } from '@mantine/core';
 import { useSelectionStore } from '../../state/selectionStore';
+import { TRAJECTORY_LAB_ID } from '../trajectory/TrajectoryLabPanel';
 import { AboutButton } from './AboutDialog';
 import { ThemeSelect } from './ThemeSelect';
 import classes from './AppHeader.module.css';
@@ -15,7 +16,7 @@ export const MOVE_LIST_ID = 'move-list-panel';
 
 interface AppHeaderProps {
   /**
-   * The phone layout: a menu button for the move list, a smaller logo and the lab switch.
+   * The phone layout: a menu button for the move list, a smaller logo and the lab button.
    * The theme picker and About move into the move list panel (see PhoneSettings).
    */
   isCompact: boolean;
@@ -28,7 +29,7 @@ export function AppHeader({ isCompact }: AppHeaderProps) {
       {isCompact && <MoveListButton />}
       <img className={classes.logo} src={LOGO_SRC} alt="Frame Lab for Melee 1.02" />
       {!isCompact && <ThemeSelect inHeader />}
-      <TrajectoryLabSwitch isCompact={isCompact} />
+      <TrajectoryLabButton isCompact={isCompact} />
       {!isCompact && <AboutButton />}
     </div>
   );
@@ -52,19 +53,21 @@ function MoveListButton() {
   );
 }
 
-function TrajectoryLabSwitch({ isCompact }: { isCompact: boolean }) {
+/** Opens and closes the Trajectory Lab tray. On phones it shortens to "Lab". */
+function TrajectoryLabButton({ isCompact }: { isCompact: boolean }) {
   const isOpen = useSelectionStore((state) => state.isTrajectoryLabOpen);
   const setOpen = useSelectionStore((state) => state.setTrajectoryLabOpen);
 
   return (
-    <Switch
-      label="Trajectory Lab"
-      labelPosition="left"
-      size="md"
-      checked={isOpen}
-      onChange={(event) => setOpen(event.currentTarget.checked)}
-      // On phones the label is hidden to save space but still read by screen readers.
-      classNames={{ label: isCompact ? classes.visuallyHidden : classes.switchLabel }}
-    />
+    <Button
+      variant={isOpen ? 'filled' : 'light'}
+      size={isCompact ? 'compact-sm' : 'sm'}
+      onClick={() => setOpen(!isOpen)}
+      aria-expanded={isOpen}
+      aria-controls={TRAJECTORY_LAB_ID}
+      aria-label="Trajectory Lab"
+    >
+      {isCompact ? 'Lab' : 'Trajectory Lab'}
+    </Button>
   );
 }

@@ -49,9 +49,11 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
   ];
   const isKnownHitbox = hit.hitboxes.some((hitbox) => hitbox.name === hitboxName);
 
+  // A two-column grid of compact inputs, so the lab fits in its tray without scrolling.
   return (
     <div className={classes.labControls}>
       <Select
+        size="xs"
         label="Victim"
         data={victimOptions}
         value={victimId}
@@ -59,7 +61,8 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
         allowDeselect={false}
       />
       <NumberInput
-        label="Victim percent (before the hit)"
+        size="xs"
+        label="Percent before hit"
         value={victimPercent}
         onChange={(value) => setVictimPercent(typeof value === 'number' ? value : 0)}
         min={0}
@@ -69,57 +72,57 @@ export function LabControls({ hit, strongestHitbox, placement, positionId }: Lab
         suffix="%"
       />
       <Select
+        size="xs"
+        className={classes.fullWidth}
         label="Hitbox"
         data={hitboxOptions}
         value={isKnownHitbox ? hitboxName : STRONGEST}
         onChange={(value) => selectHitbox(value === STRONGEST ? null : value)}
         allowDeselect={false}
       />
-      <div className={classes.fieldRow}>
-        <div>
-          <span className={classes.fieldLabel} id="attacker-facing-label">
-            Attacker faces
-          </span>
-          <SegmentedControl
-            aria-labelledby="attacker-facing-label"
-            size="xs"
-            data={FACING_OPTIONS}
-            value={isFacingLeft ? 'left' : 'right'}
-            onChange={(value) => setFacingLeft(value === 'left')}
-          />
-        </div>
-        <Checkbox
-          label="Crouch cancel"
-          description={placement.isGrounded ? undefined : 'Needs the victim on the ground'}
-          checked={isCrouching && placement.isGrounded}
-          disabled={!placement.isGrounded}
-          onChange={(event) => setCrouching(event.currentTarget.checked)}
+      <div>
+        <span className={classes.fieldLabel} id="attacker-facing-label">
+          Attacker faces
+        </span>
+        <SegmentedControl
+          aria-labelledby="attacker-facing-label"
+          size="xs"
+          fullWidth
+          data={FACING_OPTIONS}
+          value={isFacingLeft ? 'left' : 'right'}
+          onChange={(value) => setFacingLeft(value === 'left')}
         />
       </div>
-      <div className={classes.fieldRow}>
-        <NumberInput
-          className={classes.staleInput}
-          label="Stale uses"
-          description={`Times this move hit in the attacker's last ${STALE_QUEUE_LENGTH} hits`}
-          value={staleUses}
-          onChange={(value) => setStaleUses(typeof value === 'number' ? value : 0)}
-          min={0}
-          max={STALE_QUEUE_LENGTH}
-          clampBehavior="strict"
-          allowDecimal={false}
-        />
-        <Checkbox
-          label="Tech on landing"
-          description="Tumbling victims only"
-          checked={techOnLanding}
-          onChange={(event) => setTechOnLanding(event.currentTarget.checked)}
-        />
-      </div>
-      <div className={classes.positionRow}>
+      <NumberInput
+        size="xs"
+        label={`Stale uses (last ${STALE_QUEUE_LENGTH} hits)`}
+        value={staleUses}
+        onChange={(value) => setStaleUses(typeof value === 'number' ? value : 0)}
+        min={0}
+        max={STALE_QUEUE_LENGTH}
+        clampBehavior="strict"
+        allowDecimal={false}
+      />
+      <Checkbox
+        size="xs"
+        label="Crouch cancel"
+        description={placement.isGrounded ? undefined : 'Victim must be grounded'}
+        checked={isCrouching && placement.isGrounded}
+        disabled={!placement.isGrounded}
+        onChange={(event) => setCrouching(event.currentTarget.checked)}
+      />
+      <Checkbox
+        size="xs"
+        label="Tech on landing"
+        description="Tumbling victims only"
+        checked={techOnLanding}
+        onChange={(event) => setTechOnLanding(event.currentTarget.checked)}
+      />
+      <div className={`${classes.positionRow} ${classes.fullWidth}`}>
         <p className={classes.positionText} id={positionId}>
           {describePlacement(placement)}
         </p>
-        <Button size="compact-sm" variant="default" onClick={resetPosition}>
+        <Button size="compact-xs" variant="default" onClick={resetPosition}>
           Reset to center stage
         </Button>
       </div>

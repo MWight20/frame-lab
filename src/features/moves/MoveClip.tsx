@@ -121,17 +121,18 @@ export function MoveClip({
       </div>
 
       <div className={classes.controls}>
-        <Button variant="default" onClick={() => stepFrames(-1)}>
+        <Button size="xs" variant="default" onClick={() => stepFrames(-1)}>
           Previous frame
         </Button>
-        <Button onClick={togglePlaying} miw={84}>
+        <Button size="xs" onClick={togglePlaying} miw={72}>
           {isPlaying ? 'Pause' : 'Play'}
         </Button>
-        <Button variant="default" onClick={() => stepFrames(1)}>
+        <Button size="xs" variant="default" onClick={() => stepFrames(1)}>
           Next frame
         </Button>
         <div className={classes.spacer} />
         <SegmentedControl
+          size="xs"
           aria-label="Playback speed"
           data={SPEED_OPTIONS}
           value={speed}

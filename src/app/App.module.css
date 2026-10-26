@@ -9,32 +9,16 @@
   background: var(--fl-bg);
 }
 
-/* Two columns on wide screens: move viewer on the left, Trajectory Lab on the right. */
+/* One centered column: the move viewer. The Trajectory Lab is a tray over the page. */
 .workArea {
+  max-width: 1280px;
+  margin-inline: auto;
   padding: 20px 24px;
-  display: grid;
-  gap: 20px;
-  align-items: start;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* With the lab hidden, the viewer gets one centered column at a comfortable width. */
-.workArea[data-lab-open='false'] {
-  grid-template-columns: minmax(0, 960px);
-  justify-content: center;
-}
-
-/* Below ~1200px the columns stack and the page scrolls. */
-@media (max-width: 75em) {
-  .workArea {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-/* Phones: less padding so the move viewer and lab get the screen's full width. */
+/* Phones: less padding so the move viewer gets the screen's full width. */
 @media (max-width: $mantine-breakpoint-sm) {
   .workArea {
     padding: 12px;
-    gap: 16px;
   }
 }
