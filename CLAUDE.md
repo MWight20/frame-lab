@@ -37,6 +37,12 @@ All five passed at the last update, with 176 tests, and the build prints no warn
 - `.gitattributes` keeps LF line endings in the working tree. Without it, `core.autocrlf` on
   Windows checks files out as CRLF and `format:check` fails on files nobody changed.
 
+## Deployment
+
+- Hosted on Cloudflare Workers as static assets (no Worker code), at `frame-lab.mwight20.workers.dev`. Cloudflare builds from GitHub: `npm run build`, then serves `dist/`.
+- `wrangler.jsonc` is the config. Its `name` must match the Worker's name in the dashboard. The empty `previews` block is required for preview deploys of non-production branches (`npx wrangler preview`, open beta); without it those builds fail.
+- `npx wrangler deploy --dry-run` after `npm run build` checks the config without uploading.
+
 ## Stack
 
 | Tool       | Version | Notes                                                                                             |
